@@ -1,19 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondo_principal"
     tools:context=".MainActivity">
 
+    <!-- Barra superior -->
+
+    <!-- Texto -->
+
+    <!-- Imagen -->
+
+    <!-- Botón -->
+
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="44dp"
+        android:background="#0B1B35"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Logo -->
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/logo_circle"
+            android:gravity="center"
+            android:text="OTN"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="@drawable/menu_button"
+                android:text="Inicio"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/menu_button"
+                android:text="Marketplace"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/menu_button"
+                android:text="Pendientes"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/txtInfo"
+        android:layout_width="335dp"
+        android:layout_height="513dp"
+        android:layout_marginTop="52dp"
+        android:text="OTN es una plataforma digital hibrida que tiene como objetivo.\n\nayudar a otras empreseas o negocios con su crecimiento \n\OTN espera poder gusto tanto a usuarios particulares como a emprendedores de poder disfrutar diferentes tipos de usos\n\, los cuales te darán comodidad, eficiencia, seguridad confianza ty economía. \n\ Ademas, esta plataforma te dara muchas oportunidades de uso \n\ para que puedas tener una experinecia maravillosa con nosotros \n\ no solo para nuestros clientes y emprendedores"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/topBar" />
+
+    <Button
+        android:id="@+id/btnIniciar"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/boton_inicio"
+        android:text="Iniciar"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtInfo"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
