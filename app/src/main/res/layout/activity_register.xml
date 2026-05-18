@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Imagen de fondo -->
+    <!-- Fondo -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/fondo_logo"/>
+        android:src="@drawable/fondo_logo" />
 
-    <!-- Overlay -->
+    <!-- Overlay oscuro -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,81 +26,115 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Card Login -->
+        <!-- Card -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="428dp"
+            android:layout_height="wrap_content"
             android:background="#26FFFFFF"
             android:elevation="10dp"
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Titulo -->
+            <!-- Logo -->
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/logo" />
+
+            <!-- Título -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Bienvenido a OTN"
+                android:text="Crear Cuenta"
                 android:textColor="#FFFFFF"
-                android:textSize="30sp"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
-            <!-- Subtitulo -->
+            <!-- Subtítulo -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="30dp"
-                android:text="Inicia sesión para continuar"
+                android:layout_marginBottom="25dp"
+                android:text="Completa los datos para continuar"
                 android:textColor="#DDFFFFFF"
                 android:textSize="14sp" />
 
-            <!-- Input correo -->
+            <!-- Nombre -->
+            <EditText
+                android:id="@+id/etNombre"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginBottom="18dp"
+                android:background="#33FFFFFF"
+                android:hint="Nombre completo"
+                android:padding="15dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#CCCCCC"/>
+
+            <!-- Correo -->
             <EditText
                 android:id="@+id/etCorreo"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="18dp"
                 android:background="#33FFFFFF"
-                android:hint="Correo"
+                android:hint="Correo electrónico"
                 android:inputType="textEmailAddress"
                 android:padding="15dp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#CCCCCC" />
+                android:textColorHint="#CCCCCC"/>
 
-            <!-- Input contraseña -->
+            <!-- Contraseña -->
             <EditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="18dp"
                 android:background="#33FFFFFF"
                 android:hint="Contraseña"
                 android:inputType="textPassword"
                 android:padding="15dp"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#CCCCCC" />
+                android:textColorHint="#CCCCCC"/>
 
-            <!-- Botón iniciar sesión -->
+            <!-- Confirmar contraseña -->
+            <EditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginBottom="25dp"
+                android:background="#33FFFFFF"
+                android:hint="Confirmar contraseña"
+                android:inputType="textPassword"
+                android:padding="15dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#CCCCCC"/>
+
+            <!-- Botón -->
             <Button
-                android:id="@+id/btnLogin"
+                android:id="@+id/btnRegistrar"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:backgroundTint="#0066FF"
-                android:text="Iniciar sesión"
-                android:textColor="#FFFFFF" />
+                android:text="Crear cuenta"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"/>
 
-            <!-- Texto registrarse -->
+            <!-- Volver al login -->
             <TextView
-                android:id="@+id/txtRegistro"
+                android:id="@+id/txtLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="¿No tienes cuenta? Regístrate aquí"
+                android:text="¿Ya tienes cuenta? Inicia sesión"
                 android:textColor="#3FE9FF"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:textSize="15sp"
+                android:textStyle="bold"/>
 
         </LinearLayout>
 

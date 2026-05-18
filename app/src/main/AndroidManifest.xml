@@ -11,15 +11,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OTN">
+
+        <!-- Publicar -->
         <activity
+            android:name=".PublicarActivity" />
+
+
+        <!-- Registro -->
+        <activity
+            android:name=".RegisterActivity" />
+
+        <!-- Home -->
+        <activity
+            android:name=".HomeActivity" />
+
+
+        <!-- Login principal -->
+        <activity
+
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+
+        </activity
+            >
+
     </application>
 
 </manifest>
