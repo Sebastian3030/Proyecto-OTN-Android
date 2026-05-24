@@ -114,8 +114,8 @@
                         <ImageView
                             android:layout_width="120dp"
                             android:layout_height="120dp"
-                            android:src="@drawable/iphone_17"
-                            android:scaleType="centerCrop"/>
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/iphone_17"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -215,29 +215,47 @@
         android:orientation="vertical"
         android:padding="20dp">
 
+        <!-- INICIO -->
         <TextView
+            android:id="@+id/txtInicio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text=" Inicio"
+            android:text="🏠 Inicio"
             android:textColor="#FFFFFF"
             android:textSize="20sp"/>
 
+        <!-- MARKETPLACE -->
         <TextView
+            android:id="@+id/txtMarketplace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text=" Marketplace"
+            android:text="🛒 Marketplace"
             android:textColor="#FFFFFF"
             android:textSize="20sp"/>
 
+        <!-- PUBLICAR -->
         <TextView
+            android:id="@+id/txtProductos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text=" Productos"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"/>
+            android:text="📦 Publicar"
+            android:textColor="#00BFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <!-- CERRAR SESION -->
+        <TextView
+            android:id="@+id/txtCerrarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="🚪 Cerrar sesión"
+            android:textColor="#FF5252"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
