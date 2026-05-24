@@ -5,7 +5,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
@@ -13,21 +15,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 
-class HomeActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
 
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
 
+    // MENU LATERAL
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
     private lateinit var txtProductos: TextView
-    private lateinit var txtCerrarSesion: TextView
+
+    // OPCIONES
+    private lateinit var layoutFavoritos: LinearLayout
+    private lateinit var layoutCitas: LinearLayout
+    private lateinit var layoutPublicaciones: LinearLayout
+
+    // BOTONES
+    private lateinit var btnEditarPerfil: Button
+    private lateinit var btnCerrarSesion: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_profile)
 
         // REFERENCIAS
         drawerLayout = findViewById(R.id.drawerLayout)
@@ -35,19 +46,28 @@ class HomeActivity : AppCompatActivity() {
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
 
+        // MENU LATERAL
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
         txtProductos = findViewById(R.id.txtProductos)
-        txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
 
-        // ABRIR MENU LATERAL
+        // OPCIONES
+        layoutFavoritos = findViewById(R.id.layoutFavoritos)
+        layoutCitas = findViewById(R.id.layoutCitas)
+        layoutPublicaciones = findViewById(R.id.layoutPublicaciones)
+
+        // BOTONES
+        btnEditarPerfil = findViewById(R.id.btnEditarPerfil)
+        btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
+
+        // MENU LATERAL
         btnMenu.setOnClickListener {
 
             drawerLayout.openDrawer(GravityCompat.START)
 
         }
 
-        // MENU PERFIL
+        // PERFIL MENU
         imgPerfil.setOnClickListener {
 
             val popupMenu = PopupMenu(
@@ -65,7 +85,6 @@ class HomeActivity : AppCompatActivity() {
             popupMenu.menu.add("📅 Agendar citas")
             popupMenu.menu.add("🚪 Cerrar sesión")
 
-            // COLOR BLANCO TEXTO
             for (i in 0 until popupMenu.menu.size()) {
 
                 val menuItem = popupMenu.menu.getItem(i)
@@ -80,25 +99,23 @@ class HomeActivity : AppCompatActivity() {
                 )
 
                 menuItem.title = spanString
+
             }
 
             popupMenu.setOnMenuItemClickListener {
 
                 when (it.title.toString()) {
 
-                    // PERFIL
                     "👤 Sebastian" -> {
 
-                        val intent = Intent(
+                        Toast.makeText(
                             this,
-                            ProfileActivity::class.java
-                        )
-
-                        startActivity(intent)
+                            "Ya estás en tu perfil",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
                     }
 
-                    // EDITAR PERFIL
                     "✏️ Editar perfil" -> {
 
                         Toast.makeText(
@@ -109,7 +126,6 @@ class HomeActivity : AppCompatActivity() {
 
                     }
 
-                    // VINCULAR NEGOCIO
                     "🏢 Vincular negocio" -> {
 
                         val intent = Intent(
@@ -121,7 +137,6 @@ class HomeActivity : AppCompatActivity() {
 
                     }
 
-                    // FAVORITOS
                     "❤️ Favoritos" -> {
 
                         Toast.makeText(
@@ -132,7 +147,6 @@ class HomeActivity : AppCompatActivity() {
 
                     }
 
-                    // AGENDAR CITAS
                     "📅 Agendar citas" -> {
 
                         Toast.makeText(
@@ -143,7 +157,6 @@ class HomeActivity : AppCompatActivity() {
 
                     }
 
-                    // CERRAR SESION
                     "🚪 Cerrar sesión" -> {
 
                         val intent = Intent(
@@ -160,26 +173,28 @@ class HomeActivity : AppCompatActivity() {
                 }
 
                 true
+
             }
 
             popupMenu.show()
 
         }
 
-        // INICIO
+        // MENU LATERAL INICIO
         txtInicio.setOnClickListener {
 
-            Toast.makeText(
+            val intent = Intent(
                 this,
-                "Ya estás en Inicio",
-                Toast.LENGTH_SHORT
-            ).show()
+                HomeActivity::class.java
+            )
+
+            startActivity(intent)
 
             drawerLayout.closeDrawer(GravityCompat.START)
 
         }
 
-        // MARKETPLACE
+        // MENU LATERAL MARKETPLACE
         txtMarketplace.setOnClickListener {
 
             val intent = Intent(
@@ -193,7 +208,7 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
-        // PRODUCTOS / PUBLICAR
+        // MENU LATERAL PRODUCTOS
         txtProductos.setOnClickListener {
 
             val intent = Intent(
@@ -207,8 +222,53 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
-        // CERRAR SESION MENU LATERAL
-        txtCerrarSesion.setOnClickListener {
+        // EDITAR PERFIL
+        btnEditarPerfil.setOnClickListener {
+
+            Toast.makeText(
+                this,
+                "Editar perfil próximamente",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        }
+
+        // FAVORITOS
+        layoutFavoritos.setOnClickListener {
+
+            Toast.makeText(
+                this,
+                "Favoritos próximamente",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        }
+
+        // CITAS
+        layoutCitas.setOnClickListener {
+
+            Toast.makeText(
+                this,
+                "Mis citas próximamente",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        }
+
+        // PUBLICACIONES
+        layoutPublicaciones.setOnClickListener {
+
+            val intent = Intent(
+                this,
+                MarketplaceActivity::class.java
+            )
+
+            startActivity(intent)
+
+        }
+
+        // CERRAR SESION
+        btnCerrarSesion.setOnClickListener {
 
             val intent = Intent(
                 this,
@@ -235,5 +295,7 @@ class HomeActivity : AppCompatActivity() {
             super.onBackPressed()
 
         }
+
     }
+
 }

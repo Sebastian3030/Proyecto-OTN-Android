@@ -1,10 +1,13 @@
 package com.example.otn
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
@@ -13,34 +16,67 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 
-class HomeActivity : AppCompatActivity() {
+class MarketplaceActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
 
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
 
+    // MENU
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
-    private lateinit var txtProductos: TextView
-    private lateinit var txtCerrarSesion: TextView
+    private lateinit var txtPublicar: TextView
+
+    // BOTONES
+    private lateinit var btnTodos: Button
+    private lateinit var btnTecnologia: Button
+    private lateinit var btnRopa: Button
+    private lateinit var btnSpa: Button
+
+    // CARDS
+    private lateinit var cardTec1: View
+    private lateinit var cardTec2: View
+
+    private lateinit var cardRopa1: View
+    private lateinit var cardRopa2: View
+
+    private lateinit var cardSpa1: View
+    private lateinit var cardSpa2: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_marketplace)
 
-        // REFERENCIAS
+        // DRAWER
         drawerLayout = findViewById(R.id.drawerLayout)
 
+        // TOPBAR
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
 
+        // MENU
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
-        txtProductos = findViewById(R.id.txtProductos)
-        txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
+        txtPublicar = findViewById(R.id.txtPublicar)
 
-        // ABRIR MENU LATERAL
+        // BOTONES
+        btnTodos = findViewById(R.id.btnTodos)
+        btnTecnologia = findViewById(R.id.btnTecnologia)
+        btnRopa = findViewById(R.id.btnRopa)
+        btnSpa = findViewById(R.id.btnSpa)
+
+        // CARDS
+        cardTec1 = findViewById(R.id.cardTec1)
+        cardTec2 = findViewById(R.id.cardTec2)
+
+        cardRopa1 = findViewById(R.id.cardRopa1)
+        cardRopa2 = findViewById(R.id.cardRopa2)
+
+        cardSpa1 = findViewById(R.id.cardSpa1)
+        cardSpa2 = findViewById(R.id.cardSpa2)
+
+        // ABRIR MENU
         btnMenu.setOnClickListener {
 
             drawerLayout.openDrawer(GravityCompat.START)
@@ -65,7 +101,7 @@ class HomeActivity : AppCompatActivity() {
             popupMenu.menu.add("📅 Agendar citas")
             popupMenu.menu.add("🚪 Cerrar sesión")
 
-            // COLOR BLANCO TEXTO
+            // COLOR TEXTO BLANCO
             for (i in 0 until popupMenu.menu.size()) {
 
                 val menuItem = popupMenu.menu.getItem(i)
@@ -80,6 +116,7 @@ class HomeActivity : AppCompatActivity() {
                 )
 
                 menuItem.title = spanString
+
             }
 
             popupMenu.setOnMenuItemClickListener {
@@ -109,7 +146,7 @@ class HomeActivity : AppCompatActivity() {
 
                     }
 
-                    // VINCULAR NEGOCIO
+                    // PUBLICAR
                     "🏢 Vincular negocio" -> {
 
                         val intent = Intent(
@@ -132,7 +169,7 @@ class HomeActivity : AppCompatActivity() {
 
                     }
 
-                    // AGENDAR CITAS
+                    // CITAS
                     "📅 Agendar citas" -> {
 
                         Toast.makeText(
@@ -160,31 +197,21 @@ class HomeActivity : AppCompatActivity() {
                 }
 
                 true
+
             }
 
             popupMenu.show()
 
         }
 
+        // MENU LATERAL
+
         // INICIO
         txtInicio.setOnClickListener {
 
-            Toast.makeText(
-                this,
-                "Ya estás en Inicio",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            drawerLayout.closeDrawer(GravityCompat.START)
-
-        }
-
-        // MARKETPLACE
-        txtMarketplace.setOnClickListener {
-
             val intent = Intent(
                 this,
-                MarketplaceActivity::class.java
+                HomeActivity::class.java
             )
 
             startActivity(intent)
@@ -193,8 +220,21 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
-        // PRODUCTOS / PUBLICAR
-        txtProductos.setOnClickListener {
+        // MARKETPLACE
+        txtMarketplace.setOnClickListener {
+
+            Toast.makeText(
+                this,
+                "Ya estás en Marketplace",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            drawerLayout.closeDrawer(GravityCompat.START)
+
+        }
+
+        // PUBLICAR
+        txtPublicar.setOnClickListener {
 
             val intent = Intent(
                 this,
@@ -207,19 +247,102 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
-        // CERRAR SESION MENU LATERAL
-        txtCerrarSesion.setOnClickListener {
+        // MOSTRAR TODO
+        mostrarTodos()
+        actualizarBotones(btnTodos)
 
-            val intent = Intent(
-                this,
-                MainActivity::class.java
-            )
+        // TODOS
+        btnTodos.setOnClickListener {
 
-            startActivity(intent)
+            mostrarTodos()
 
-            finish()
+            actualizarBotones(btnTodos)
 
         }
+
+        // TECNOLOGIA
+        btnTecnologia.setOnClickListener {
+
+            ocultarTodo()
+
+            cardTec1.visibility = View.VISIBLE
+            cardTec2.visibility = View.VISIBLE
+
+            actualizarBotones(btnTecnologia)
+
+        }
+
+        // ROPA
+        btnRopa.setOnClickListener {
+
+            ocultarTodo()
+
+            cardRopa1.visibility = View.VISIBLE
+            cardRopa2.visibility = View.VISIBLE
+
+            actualizarBotones(btnRopa)
+
+        }
+
+        // SPA
+        btnSpa.setOnClickListener {
+
+            ocultarTodo()
+
+            cardSpa1.visibility = View.VISIBLE
+            cardSpa2.visibility = View.VISIBLE
+
+            actualizarBotones(btnSpa)
+
+        }
+
+    }
+
+    // MOSTRAR TODO
+    private fun mostrarTodos() {
+
+        cardTec1.visibility = View.VISIBLE
+        cardTec2.visibility = View.VISIBLE
+
+        cardRopa1.visibility = View.VISIBLE
+        cardRopa2.visibility = View.VISIBLE
+
+        cardSpa1.visibility = View.VISIBLE
+        cardSpa2.visibility = View.VISIBLE
+
+    }
+
+    // OCULTAR TODO
+    private fun ocultarTodo() {
+
+        cardTec1.visibility = View.GONE
+        cardTec2.visibility = View.GONE
+
+        cardRopa1.visibility = View.GONE
+        cardRopa2.visibility = View.GONE
+
+        cardSpa1.visibility = View.GONE
+        cardSpa2.visibility = View.GONE
+
+    }
+
+    // BOTON ACTIVO
+    private fun actualizarBotones(botonActivo: Button) {
+
+        btnTodos.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor("#1AFFFFFF"))
+
+        btnTecnologia.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor("#1AFFFFFF"))
+
+        btnRopa.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor("#1AFFFFFF"))
+
+        btnSpa.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor("#1AFFFFFF"))
+
+        botonActivo.backgroundTintList =
+            ColorStateList.valueOf(Color.parseColor("#00BFFF"))
 
     }
 
@@ -235,5 +358,7 @@ class HomeActivity : AppCompatActivity() {
             super.onBackPressed()
 
         }
+
     }
+
 }

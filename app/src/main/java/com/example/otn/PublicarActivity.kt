@@ -23,6 +23,11 @@ class PublicarActivity : AppCompatActivity() {
 
     private lateinit var btnPublicar: Button
 
+    // MENU LATERAL
+    private lateinit var txtInicio: TextView
+    private lateinit var txtMarketplace: TextView
+    private lateinit var txtProductos: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_publicar)
@@ -35,7 +40,12 @@ class PublicarActivity : AppCompatActivity() {
 
         btnPublicar = findViewById(R.id.btnPublicar)
 
-        // ABRIR MENU LATERAL
+        // MENU LATERAL
+        txtInicio = findViewById(R.id.txtInicio)
+        txtMarketplace = findViewById(R.id.txtMarketplace)
+        txtProductos = findViewById(R.id.txtProductos)
+
+        // ABRIR MENU
         btnMenu.setOnClickListener {
 
             drawerLayout.openDrawer(GravityCompat.START)
@@ -60,7 +70,7 @@ class PublicarActivity : AppCompatActivity() {
             popupMenu.menu.add("📅 Agendar citas")
             popupMenu.menu.add("🚪 Cerrar sesión")
 
-            // COLOR BLANCO TEXTO
+            // COLOR BLANCO
             for (i in 0 until popupMenu.menu.size()) {
 
                 val menuItem = popupMenu.menu.getItem(i)
@@ -81,6 +91,19 @@ class PublicarActivity : AppCompatActivity() {
 
                 when (it.title.toString()) {
 
+                    // PERFIL
+                    "👤 Sebastian" -> {
+
+                        val intent = Intent(
+                            this,
+                            ProfileActivity::class.java
+                        )
+
+                        startActivity(intent)
+
+                    }
+
+                    // EDITAR PERFIL
                     "✏️ Editar perfil" -> {
 
                         Toast.makeText(
@@ -91,16 +114,18 @@ class PublicarActivity : AppCompatActivity() {
 
                     }
 
+                    // VINCULAR NEGOCIO
                     "🏢 Vincular negocio" -> {
 
                         Toast.makeText(
                             this,
-                            "Vincular negocio próximamente",
+                            "Ya estás en Publicar",
                             Toast.LENGTH_SHORT
                         ).show()
 
                     }
 
+                    // FAVORITOS
                     "❤️ Favoritos" -> {
 
                         Toast.makeText(
@@ -111,6 +136,7 @@ class PublicarActivity : AppCompatActivity() {
 
                     }
 
+                    // CITAS
                     "📅 Agendar citas" -> {
 
                         Toast.makeText(
@@ -121,10 +147,16 @@ class PublicarActivity : AppCompatActivity() {
 
                     }
 
+                    // CERRAR SESION
                     "🚪 Cerrar sesión" -> {
 
-                        val intent = Intent(this, MainActivity::class.java)
+                        val intent = Intent(
+                            this,
+                            MainActivity::class.java
+                        )
+
                         startActivity(intent)
+
                         finish()
 
                     }
@@ -146,6 +178,47 @@ class PublicarActivity : AppCompatActivity() {
                 "Producto publicado correctamente",
                 Toast.LENGTH_SHORT
             ).show()
+
+        }
+
+        // INICIO
+        txtInicio.setOnClickListener {
+
+            val intent = Intent(
+                this,
+                HomeActivity::class.java
+            )
+
+            startActivity(intent)
+
+            drawerLayout.closeDrawer(GravityCompat.START)
+
+        }
+
+        // MARKETPLACE
+        txtMarketplace.setOnClickListener {
+
+            val intent = Intent(
+                this,
+                MarketplaceActivity::class.java
+            )
+
+            startActivity(intent)
+
+            drawerLayout.closeDrawer(GravityCompat.START)
+
+        }
+
+        // PUBLICAR
+        txtProductos.setOnClickListener {
+
+            Toast.makeText(
+                this,
+                "Ya estás en Publicar",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            drawerLayout.closeDrawer(GravityCompat.START)
 
         }
 

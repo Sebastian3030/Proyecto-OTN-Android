@@ -12,6 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OTN">
 
+
+        <!-- Perfil -->
+        <activity
+            android:name=".ProfileActivity"/>
+
+
+        <activity
+            android:name=".MarketplaceActivity"/>
+
+
         <!-- Publicar -->
         <activity
             android:name=".PublicarActivity" />
