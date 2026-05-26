@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- CONTENIDO -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Mi Perfil"
+                android:text="Favoritos"
                 android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold"/>
@@ -72,155 +72,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="18dp">
 
-                <!-- CARD PERFIL -->
+                <!-- CARD 1 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="#26FFFFFF"
-                    android:elevation="8dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="25dp">
-
-                    <ImageView
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:layout_marginBottom="15dp"
-                        android:src="@drawable/perfil"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sebastian"
-                        android:textColor="#FFFFFF"
-                        android:textSize="24sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="sebastian@gmail.com"
-                        android:textColor="#DDFFFFFF"
-                        android:textSize="15sp"/>
-
-                    <Button
-                        android:id="@+id/btnEditarPerfil"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="20dp"
-                        android:backgroundTint="#0066FF"
-                        android:text="Editar perfil"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"/>
-
-                </LinearLayout>
-
-                <!-- FAVORITOS -->
-                <LinearLayout
-                    android:id="@+id/layoutFavoritos"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="#26FFFFFF"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="❤️"
-                        android:textSize="24sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:text="Favoritos"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-
-                </LinearLayout>
-
-                <!-- CITAS -->
-                <LinearLayout
-                    android:id="@+id/layoutCitas"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="#26FFFFFF"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📅"
-                        android:textSize="24sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:text="Mis citas"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-
-                </LinearLayout>
-
-                <!-- PUBLICACIONES -->
-                <LinearLayout
-                    android:id="@+id/layoutPublicaciones"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="#26FFFFFF"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📦"
-                        android:textSize="24sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:text="Mis publicaciones"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-
-                </LinearLayout>
-
-                <!-- PRODUCTO -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="18dp"
                     android:background="#26FFFFFF"
                     android:orientation="vertical"
                     android:padding="15dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="Último producto publicado"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -231,7 +92,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="12dp"
                         android:text="iPhone 15 Pro Max"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
@@ -244,19 +105,142 @@
                         android:textColor="#00BFFF"
                         android:textSize="16sp"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="❤️ Guardado"
+                        android:textColor="#FF4D6D"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
                 </LinearLayout>
 
-                <!-- CERRAR SESION -->
-                <Button
-                    android:id="@+id/btnCerrarSesion"
+                <!-- CARD 2 -->
+
+                <!-- CARD 3 -->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginBottom="30dp"
-                    android:backgroundTint="#FF4444"
-                    android:text="Cerrar sesión"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="18dp"
+                    android:background="#26FFFFFF"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/computador" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Computador Gamer"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$3.200.000"
+                        android:textColor="#00BFFF"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="❤️ Guardado"
+                        android:textColor="#FF4D6D"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="18dp"
+                    android:background="#26FFFFFF"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ropa"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Chaqueta"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$180.000"
+                        android:textColor="#00BFFF"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="❤️ Guardado"
+                        android:textColor="#FF4D6D"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <!-- CARD 4 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#26FFFFFF"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/spa"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Spa relajante"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$120.000"
+                        android:textColor="#00BFFF"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="❤️ Guardado"
+                        android:textColor="#FF4D6D"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -266,7 +250,6 @@
 
     <!-- MENU LATERAL -->
     <LinearLayout
-        android:id="@+id/menuLateral"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -297,7 +280,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="📦 Productos"
+            android:text="📦 Publicar"
             android:textColor="#FFFFFF"
             android:textSize="20sp"/>
 

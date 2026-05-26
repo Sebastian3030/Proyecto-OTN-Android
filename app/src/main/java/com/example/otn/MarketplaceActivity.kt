@@ -27,6 +27,7 @@ class MarketplaceActivity : AppCompatActivity() {
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
     private lateinit var txtPublicar: TextView
+    private lateinit var txtCerrarSesion: TextView
 
     // BOTONES
     private lateinit var btnTodos: Button
@@ -59,6 +60,7 @@ class MarketplaceActivity : AppCompatActivity() {
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
         txtPublicar = findViewById(R.id.txtPublicar)
+        txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
 
         // BOTONES
         btnTodos = findViewById(R.id.btnTodos)
@@ -101,7 +103,7 @@ class MarketplaceActivity : AppCompatActivity() {
             popupMenu.menu.add("📅 Agendar citas")
             popupMenu.menu.add("🚪 Cerrar sesión")
 
-            // COLOR TEXTO BLANCO
+            // TEXTO BLANCO
             for (i in 0 until popupMenu.menu.size()) {
 
                 val menuItem = popupMenu.menu.getItem(i)
@@ -126,46 +128,36 @@ class MarketplaceActivity : AppCompatActivity() {
                     // PERFIL
                     "👤 Sebastian" -> {
 
-                        val intent = Intent(
-                            this,
-                            ProfileActivity::class.java
+                        startActivity(
+                            Intent(this, ProfileActivity::class.java)
                         )
-
-                        startActivity(intent)
 
                     }
 
                     // EDITAR PERFIL
                     "✏️ Editar perfil" -> {
 
-                        Toast.makeText(
-                            this,
-                            "Editar perfil próximamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        startActivity(
+                            Intent(this, EditarPerfilActivity::class.java)
+                        )
 
                     }
 
                     // PUBLICAR
                     "🏢 Vincular negocio" -> {
 
-                        val intent = Intent(
-                            this,
-                            PublicarActivity::class.java
+                        startActivity(
+                            Intent(this, PublicarActivity::class.java)
                         )
-
-                        startActivity(intent)
 
                     }
 
                     // FAVORITOS
                     "❤️ Favoritos" -> {
 
-                        Toast.makeText(
-                            this,
-                            "Favoritos próximamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        startActivity(
+                            Intent(this, FavoritosActivity::class.java)
+                        )
 
                     }
 
@@ -174,7 +166,7 @@ class MarketplaceActivity : AppCompatActivity() {
 
                         Toast.makeText(
                             this,
-                            "Agendar citas próximamente",
+                            "Próximamente",
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -183,12 +175,9 @@ class MarketplaceActivity : AppCompatActivity() {
                     // CERRAR SESION
                     "🚪 Cerrar sesión" -> {
 
-                        val intent = Intent(
-                            this,
-                            MainActivity::class.java
+                        startActivity(
+                            Intent(this, MainActivity::class.java)
                         )
-
-                        startActivity(intent)
 
                         finish()
 
@@ -209,12 +198,9 @@ class MarketplaceActivity : AppCompatActivity() {
         // INICIO
         txtInicio.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                HomeActivity::class.java
+            startActivity(
+                Intent(this, HomeActivity::class.java)
             )
-
-            startActivity(intent)
 
             drawerLayout.closeDrawer(GravityCompat.START)
 
@@ -236,20 +222,75 @@ class MarketplaceActivity : AppCompatActivity() {
         // PUBLICAR
         txtPublicar.setOnClickListener {
 
-            val intent = Intent(
-                this,
-                PublicarActivity::class.java
+            startActivity(
+                Intent(this, PublicarActivity::class.java)
             )
-
-            startActivity(intent)
 
             drawerLayout.closeDrawer(GravityCompat.START)
 
         }
 
-        // MOSTRAR TODO
-        mostrarTodos()
-        actualizarBotones(btnTodos)
+        // CERRAR SESION
+        txtCerrarSesion.setOnClickListener {
+
+            startActivity(
+                Intent(this, MainActivity::class.java)
+            )
+
+            finish()
+
+        }
+
+        // =========================
+        // RECIBIR CATEGORIA HOME
+        // =========================
+
+        val categoria = intent.getStringExtra("categoria")
+
+        when (categoria) {
+
+            "tecnologia" -> {
+
+                ocultarTodo()
+
+                cardTec1.visibility = View.VISIBLE
+                cardTec2.visibility = View.VISIBLE
+
+                actualizarBotones(btnTecnologia)
+
+            }
+
+            "ropa" -> {
+
+                ocultarTodo()
+
+                cardRopa1.visibility = View.VISIBLE
+                cardRopa2.visibility = View.VISIBLE
+
+                actualizarBotones(btnRopa)
+
+            }
+
+            "spa" -> {
+
+                ocultarTodo()
+
+                cardSpa1.visibility = View.VISIBLE
+                cardSpa2.visibility = View.VISIBLE
+
+                actualizarBotones(btnSpa)
+
+            }
+
+            else -> {
+
+                mostrarTodos()
+
+                actualizarBotones(btnTodos)
+
+            }
+
+        }
 
         // TODOS
         btnTodos.setOnClickListener {

@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Fondo -->
+        <!-- FONDO -->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/fondo_logo" />
 
-        <!-- Overlay -->
+        <!-- OVERLAY -->
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_height="28dp"
                 android:src="@drawable/menu" />
 
-            <!-- LOGO / TITULO -->
+            <!-- TITULO -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/baner" />
 
-                <!-- TEXTO CATEGORIAS -->
+                <!-- TITULO CATEGORIAS -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -105,14 +105,18 @@
                         android:orientation="horizontal"
                         android:paddingHorizontal="10dp">
 
-                        <!-- Tecnologia -->
+                        <!-- TECNOLOGIA -->
                         <LinearLayout
+                            android:id="@+id/cardTecnologia"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:layout_margin="8dp"
                             android:background="#1AFFFFFF"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
                             <ImageView
                                 android:layout_width="40dp"
@@ -128,14 +132,18 @@
 
                         </LinearLayout>
 
-                        <!-- Ropa -->
+                        <!-- ROPA -->
                         <LinearLayout
+                            android:id="@+id/cardRopa"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:layout_margin="8dp"
                             android:background="#1AFFFFFF"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
                             <ImageView
                                 android:layout_width="40dp"
@@ -151,25 +159,29 @@
 
                         </LinearLayout>
 
-                        <!-- Audio -->
+                        <!-- SPA -->
                         <LinearLayout
+                            android:id="@+id/cardSpa"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:layout_margin="8dp"
                             android:background="#1AFFFFFF"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
                             <ImageView
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
-                                android:src="@drawable/sonidos"/>
+                                android:src="@drawable/spa"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="Audio"
+                                android:text="SPA"
                                 android:textColor="#FFFFFF"/>
 
                         </LinearLayout>
@@ -178,59 +190,65 @@
 
                 </HorizontalScrollView>
 
-                <!-- PRODUCTOS -->
+                <!-- PRODUCTO DESTACADO -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="15dp"
-                    android:text="Productos destacados"
+                    android:text="Producto destacado"
                     android:textColor="#FFFFFF"
                     android:textSize="22sp"
                     android:textStyle="bold"/>
 
-                <!-- PRODUCTO 1 -->
+                <!-- CARD IPHONE -->
                 <LinearLayout
+                    android:id="@+id/cardIphone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="15dp"
-                    android:layout_marginBottom="15dp"
+                    android:layout_marginBottom="20dp"
                     android:background="#1AFFFFFF"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical"
                     android:padding="12dp">
 
-                    <!--
-                    TEMPORAL:
-                    Estas imágenes y textos son simulados.
-                    Cuando esté lista la base de datos y el backend,
-                    eliminar esta información y reemplazarla
-                    por datos dinámicos.
-                    -->
-
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
+                        android:layout_height="220dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/iphone_17"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="12dp"
                         android:text="iPhone 17 Pro Max"
                         android:textColor="#FFFFFF"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="256GB • Titanio Negro"
+                        android:textColor="#D6D6D6"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="$4.500.000"
-                        android:textColor="#00BFFF"
-                        android:textSize="16sp"/>
+                        android:textColor="#4FC3F7"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
+
 
                 <!-- PRODUCTO 2 -->
                 <LinearLayout
@@ -261,7 +279,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="$350.000"
-                        android:textColor="#00BFFF"
+                        android:textColor="#4FC3F7"
                         android:textSize="16sp"/>
 
                 </LinearLayout>

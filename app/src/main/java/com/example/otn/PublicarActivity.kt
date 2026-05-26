@@ -28,6 +28,8 @@ class PublicarActivity : AppCompatActivity() {
     private lateinit var txtMarketplace: TextView
     private lateinit var txtProductos: TextView
 
+    private lateinit var txtCerrarSesion: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_publicar)
@@ -44,6 +46,7 @@ class PublicarActivity : AppCompatActivity() {
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
         txtProductos = findViewById(R.id.txtProductos)
+        txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
 
         // ABRIR MENU
         btnMenu.setOnClickListener {
@@ -106,34 +109,35 @@ class PublicarActivity : AppCompatActivity() {
                     // EDITAR PERFIL
                     "✏️ Editar perfil" -> {
 
-                        Toast.makeText(
+                        val intent = Intent(
                             this,
-                            "Editar perfil próximamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            EditarPerfilActivity::class.java
+                        )
+
+                        startActivity(intent)
 
                     }
 
                     // VINCULAR NEGOCIO
                     "🏢 Vincular negocio" -> {
 
-                        Toast.makeText(
+                        val intent = Intent(
                             this,
-                            "Ya estás en Publicar",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            PublicarActivity::class.java
+                        )
 
+                        startActivity(intent)
                     }
 
                     // FAVORITOS
                     "❤️ Favoritos" -> {
 
-                        Toast.makeText(
+                        val intent = Intent(
                             this,
-                            "Favoritos próximamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            FavoritosActivity::class.java
+                        )
 
+                        startActivity(intent)
                     }
 
                     // CITAS
@@ -221,6 +225,21 @@ class PublicarActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
 
         }
+
+        //CERRAR SESION
+        txtCerrarSesion.setOnClickListener {
+
+            val intent = Intent(
+                this,
+                MainActivity::class.java
+            )
+
+            startActivity(intent)
+
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+
 
     }
 
