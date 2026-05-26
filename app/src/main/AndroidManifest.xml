@@ -12,6 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OTN">
 
+        <!--DETALLES DEL PRODUCTO-->
+        <activity
+            android:name=".DetalleProductoActivity"/>
+
+
+        <!--FAVORITOS -->
+        <activity
+            android:name=".FavoritosActivity"/>
+
+
+        <!-- Editar Perfil -->
+        <activity
+            android:name=".EditarPerfilActivity"/>
+
 
         <!-- Perfil -->
         <activity

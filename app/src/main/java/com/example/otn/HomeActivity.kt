@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
@@ -20,34 +21,59 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
 
+    // MENU LATERAL
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
     private lateinit var txtProductos: TextView
     private lateinit var txtCerrarSesion: TextView
 
+    // CATEGORIAS
+    private lateinit var cardTecnologia: LinearLayout
+    private lateinit var cardRopa: LinearLayout
+    private lateinit var cardSpa: LinearLayout
+
+    // PRODUCTO
+    private lateinit var cardIphone: LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        // REFERENCIAS
+        // DRAWER
         drawerLayout = findViewById(R.id.drawerLayout)
 
+        // TOPBAR
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
 
+        // MENU LATERAL
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
         txtProductos = findViewById(R.id.txtProductos)
         txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
 
-        // ABRIR MENU LATERAL
+        // CATEGORIAS
+        cardTecnologia = findViewById(R.id.cardTecnologia)
+        cardRopa = findViewById(R.id.cardRopa)
+        cardSpa = findViewById(R.id.cardSpa)
+
+        // PRODUCTO
+        cardIphone = findViewById(R.id.cardIphone)
+
+        // =========================
+        // MENU LATERAL
+        // =========================
+
         btnMenu.setOnClickListener {
 
             drawerLayout.openDrawer(GravityCompat.START)
 
         }
 
+        // =========================
         // MENU PERFIL
+        // =========================
+
         imgPerfil.setOnClickListener {
 
             val popupMenu = PopupMenu(
@@ -65,7 +91,7 @@ class HomeActivity : AppCompatActivity() {
             popupMenu.menu.add("📅 Agendar citas")
             popupMenu.menu.add("🚪 Cerrar sesión")
 
-            // COLOR BLANCO TEXTO
+            // COLOR TEXTO
             for (i in 0 until popupMenu.menu.size()) {
 
                 val menuItem = popupMenu.menu.getItem(i)
@@ -80,6 +106,7 @@ class HomeActivity : AppCompatActivity() {
                 )
 
                 menuItem.title = spanString
+
             }
 
             popupMenu.setOnMenuItemClickListener {
@@ -101,15 +128,16 @@ class HomeActivity : AppCompatActivity() {
                     // EDITAR PERFIL
                     "✏️ Editar perfil" -> {
 
-                        Toast.makeText(
+                        val intent = Intent(
                             this,
-                            "Editar perfil próximamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            EditarPerfilActivity::class.java
+                        )
+
+                        startActivity(intent)
 
                     }
 
-                    // VINCULAR NEGOCIO
+                    // PUBLICAR
                     "🏢 Vincular negocio" -> {
 
                         val intent = Intent(
@@ -124,20 +152,21 @@ class HomeActivity : AppCompatActivity() {
                     // FAVORITOS
                     "❤️ Favoritos" -> {
 
-                        Toast.makeText(
+                        val intent = Intent(
                             this,
-                            "Favoritos próximamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            FavoritosActivity::class.java
+                        )
+
+                        startActivity(intent)
 
                     }
 
-                    // AGENDAR CITAS
+                    // CITAS
                     "📅 Agendar citas" -> {
 
                         Toast.makeText(
                             this,
-                            "Agendar citas próximamente",
+                            "Próximamente disponible",
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -160,11 +189,86 @@ class HomeActivity : AppCompatActivity() {
                 }
 
                 true
+
             }
 
             popupMenu.show()
 
         }
+
+        // =========================
+        // CATEGORIAS
+        // =========================
+
+        // TECNOLOGIA
+        cardTecnologia.setOnClickListener {
+
+            val intent = Intent(
+                this,
+                MarketplaceActivity::class.java
+            )
+
+            intent.putExtra(
+                "categoria",
+                "tecnologia"
+            )
+
+            startActivity(intent)
+
+        }
+
+        // ROPA
+        cardRopa.setOnClickListener {
+
+            val intent = Intent(
+                this,
+                MarketplaceActivity::class.java
+            )
+
+            intent.putExtra(
+                "categoria",
+                "ropa"
+            )
+
+            startActivity(intent)
+
+        }
+
+        // SPA
+        cardSpa.setOnClickListener {
+
+            val intent = Intent(
+                this,
+                MarketplaceActivity::class.java
+            )
+
+            intent.putExtra(
+                "categoria",
+                "spa"
+            )
+
+            startActivity(intent)
+
+        }
+
+        // =========================
+        // PRODUCTO IPHONE
+        // =========================
+
+        cardIphone.setOnClickListener {
+
+            val intent = Intent(
+                this,
+                DetalleProductoActivity::class.java
+            )
+
+            startActivity(intent)
+
+        }
+
+        // =========================
+        // MENU LATERAL
+        // =========================
 
         // INICIO
         txtInicio.setOnClickListener {
@@ -193,7 +297,7 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
-        // PRODUCTOS / PUBLICAR
+        // PRODUCTOS
         txtProductos.setOnClickListener {
 
             val intent = Intent(
@@ -207,7 +311,7 @@ class HomeActivity : AppCompatActivity() {
 
         }
 
-        // CERRAR SESION MENU LATERAL
+        // CERRAR SESION
         txtCerrarSesion.setOnClickListener {
 
             val intent = Intent(
@@ -223,7 +327,10 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    // =========================
     // BOTON ATRAS
+    // =========================
+
     override fun onBackPressed() {
 
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -235,5 +342,7 @@ class HomeActivity : AppCompatActivity() {
             super.onBackPressed()
 
         }
+
     }
+
 }
