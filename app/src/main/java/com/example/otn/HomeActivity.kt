@@ -164,11 +164,11 @@ class HomeActivity : AppCompatActivity() {
                     // CITAS
                     "📅 Agendar citas" -> {
 
-                        Toast.makeText(
+                        val intent = Intent(
                             this,
-                            "Próximamente disponible",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            AgendarCitaActivity::class.java
+                        )
+                        startActivity(intent)
 
                     }
 

@@ -144,11 +144,11 @@ class EditarPerfilActivity : AppCompatActivity() {
                     // CITAS
                     "📅 Agendar citas" -> {
 
-                        Toast.makeText(
+                        val intent = Intent(
                             this,
-                            "Citas próximamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            AgendarCitaActivity::class.java
+                        )
+                        startActivity(intent)
 
                     }
 
