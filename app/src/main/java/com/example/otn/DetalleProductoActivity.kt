@@ -151,11 +151,11 @@ class DetalleProductoActivity : AppCompatActivity() {
                     // CITAS
                     "📅 Agendar citas" -> {
 
-                        Toast.makeText(
+                        val intent = Intent(
                             this,
-                            "Próximamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            AgendarCitaActivity::class.java
+                        )
+                        startActivity(intent)
 
                     }
 
@@ -244,22 +244,23 @@ class DetalleProductoActivity : AppCompatActivity() {
         // BOTON CONTACTAR
         btnContactar.setOnClickListener {
 
-            Toast.makeText(
+            val intent = Intent(
                 this,
-                "Chat próximamente",
-                Toast.LENGTH_SHORT
-            ).show()
+                ChatActivity::class.java
+            )
 
+            startActivity(intent)
         }
 
         // BOTON COMPRAR
         btnComprar.setOnClickListener {
 
-            Toast.makeText(
+            val intent = Intent(
                 this,
-                "Compras próximamente",
-                Toast.LENGTH_SHORT
-            ).show()
+                CompraActivity::class.java
+            )
+
+            startActivity(intent)
 
         }
 

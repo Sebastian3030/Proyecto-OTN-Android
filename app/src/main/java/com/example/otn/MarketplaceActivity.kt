@@ -164,11 +164,11 @@ class MarketplaceActivity : AppCompatActivity() {
                     // CITAS
                     "📅 Agendar citas" -> {
 
-                        Toast.makeText(
+                        val intent = Intent(
                             this,
-                            "Próximamente",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            AgendarCitaActivity::class.java
+                        )
+                        startActivity(intent)
 
                     }
 

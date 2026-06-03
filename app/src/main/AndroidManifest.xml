@@ -12,6 +12,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OTN">
 
+        <!--CITA CONFIRMADA-->
+        <activity android:name=".CitaConfirmadaActivity"/>
+
+
+
+        <!--AGENDAR CITA-->
+        <activity android:name=".AgendarCitaActivity"/>
+
+
+        <!--PAGO-->
+        <activity android:name=".PagoActivity"/>
+
+
+        <!--COMPRA -->
+        <activity android:name=".CompraActivity"/>
+
+
+        <!--CHAT -->
+        <activity android:name=".ChatActivity"/>
+
+
         <!--DETALLES DEL PRODUCTO-->
         <activity
             android:name=".DetalleProductoActivity"/>
