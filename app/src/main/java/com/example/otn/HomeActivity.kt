@@ -3,346 +3,199 @@ package com.example.otn
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
-
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
 
-    // MENU LATERAL
+    // CARRUSEL
+    private lateinit var viewPagerCarrusel: ViewPager2
+    private val sliderHandler = Handler(Looper.getMainLooper())
+    private lateinit var sliderRunnable: Runnable
+
+    // MENÚ LATERAL
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
     private lateinit var txtProductos: TextView
     private lateinit var txtCerrarSesion: TextView
 
-    // CATEGORIAS
+    // CATEGORÍAS
     private lateinit var cardTecnologia: LinearLayout
     private lateinit var cardRopa: LinearLayout
     private lateinit var cardSpa: LinearLayout
 
-    // PRODUCTO
-    private lateinit var cardIphone: LinearLayout
+    // RECYCLERVIEW (FEED DINÁMICO DE PRODUCTOS)
+    private lateinit var rvProductosHome: RecyclerView
+    private var listaDeProductos = ArrayList<Producto>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        // DRAWER
+        // 1. INICIALIZAR VISTAS DE NAVEGACIÓN Y COMPONENTES
         drawerLayout = findViewById(R.id.drawerLayout)
-
-        // TOPBAR
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
 
-        // MENU LATERAL
+        val topBar = findViewById<LinearLayout>(R.id.topBar)
+        ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
+            val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.setPadding(view.paddingLeft, statusBarInsets.top, view.paddingRight, view.paddingBottom)
+            insets
+        }
+
+        // 2. CONFIGURAR EL CARRUSEL
+        viewPagerCarrusel = findViewById(R.id.viewPagerCarrusel)
+
+        val listaImagenes: List<Any> = listOf(
+            R.drawable.vestido,
+            R.drawable.sonidos,
+            R.drawable.iphone_17,
+            R.drawable.masajes
+        )
+
+        viewPagerCarrusel.adapter = CarruselAdapter(listaImagenes) { position ->
+            val intent = Intent(this, DetalleProductoActivity::class.java).apply {
+                putExtra(EXTRA_ID_PRODUCTO, "BANNER_PROD_$position")
+            }
+            startActivity(intent)
+        }
+
+        sliderRunnable = Runnable {
+            var itemActual = viewPagerCarrusel.currentItem + 1
+            if (itemActual >= listaImagenes.size) itemActual = 0
+            viewPagerCarrusel.currentItem = itemActual
+            sliderHandler.postDelayed(sliderRunnable, 4000)
+        }
+
+        // 3. INICIALIZAR EL RECYCLERVIEW DINÁMICO
+        rvProductosHome = findViewById(R.id.rvProductosHome)
+        rvProductosHome.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        cargarProductosDesdeBD()
+
+        // 4. ENLAZAR COMPONENTES DEL MENÚ LATERAL Y CATEGORÍAS
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
         txtProductos = findViewById(R.id.txtProductos)
         txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
-
-        // CATEGORIAS
         cardTecnologia = findViewById(R.id.cardTecnologia)
         cardRopa = findViewById(R.id.cardRopa)
         cardSpa = findViewById(R.id.cardSpa)
 
-        // PRODUCTO
-        cardIphone = findViewById(R.id.cardIphone)
+        btnMenu.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
+        txtInicio.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
 
-        // =========================
-        // MENU LATERAL
-        // =========================
-
-        btnMenu.setOnClickListener {
-
-            drawerLayout.openDrawer(GravityCompat.START)
-
+        txtMarketplace.setOnClickListener {
+            startActivity(Intent(this, MarketplaceActivity::class.java))
+            drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        // =========================
-        // MENU PERFIL
-        // =========================
+        txtProductos.setOnClickListener {
+            startActivity(Intent(this, MisProductosActivity::class.java))
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
 
+        txtCerrarSesion.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finishAffinity()
+        }
+
+        // Aquí cambiamos los parámetros enviados a minúsculas exactas para que hagan juego con tu Marketplace
+        cardTecnologia.setOnClickListener { abrirMarketplaceConFiltro("tecnologia") }
+        cardRopa.setOnClickListener { abrirMarketplaceConFiltro("ropa") }
+        cardSpa.setOnClickListener { abrirMarketplaceConFiltro("spa") }
+
+        // 5. POPUP MENÚ PERFIL
         imgPerfil.setOnClickListener {
 
-            val popupMenu = PopupMenu(
-                this,
-                imgPerfil,
-                0,
-                0,
-                R.style.PopupMenuStyle
-            )
+            // 1. Forzamos el contexto para que aplique el diseño oscuro de tu themes.xml
+            val contextWrapper = android.view.ContextThemeWrapper(this, R.style.PopupMenuStyle)
+            val popupMenu = PopupMenu(contextWrapper, imgPerfil)
 
-            popupMenu.menu.add("👤 Sebastian")
-            popupMenu.menu.add("✏️ Editar perfil")
-            popupMenu.menu.add("🏢 Vincular negocio")
-            popupMenu.menu.add("❤️ Favoritos")
-            popupMenu.menu.add("📅 Agendar citas")
-            popupMenu.menu.add("🚪 Cerrar sesión")
+            // 2. Cargamos las opciones del menú
+            popupMenu.menu.add(0, 0, 0, "👤 Sebastian")
+            popupMenu.menu.add(0, 1, 1, "✏️ Editar perfil")
+            popupMenu.menu.add(0, 2, 2, "🏢 Vincular negocio")
+            popupMenu.menu.add(0, 3, 3, "❤️ Favoritos")
+            popupMenu.menu.add(0, 4, 4, "🗒️ Historial de citas")
+            popupMenu.menu.add(0, 5, 5, "📅 Agendar citas")
+            popupMenu.menu.add(0, 6, 6, "📖 Historial de compras")
+            popupMenu.menu.add(0, 7, 7, "💷 Historial de pagos")
+            popupMenu.menu.add(0, 8, 8, "🚪 Cerrar sesión")
 
-            // COLOR TEXTO
-            for (i in 0 until popupMenu.menu.size()) {
+            // ⚠️ RECUERDA: Si tenías un bucle "for" abajo que intentaba pintar las letras de blanco
+            // usando SpannableString, bórralo por completo. Ya no hace falta.
 
-                val menuItem = popupMenu.menu.getItem(i)
-
-                val spanString = SpannableString(menuItem.title)
-
-                spanString.setSpan(
-                    ForegroundColorSpan(Color.WHITE),
-                    0,
-                    spanString.length,
-                    0
-                )
-
-                menuItem.title = spanString
-
-            }
-
-            popupMenu.setOnMenuItemClickListener {
-
-                when (it.title.toString()) {
-
-                    // PERFIL
-                    "👤 Sebastian" -> {
-
-                        val intent = Intent(
-                            this,
-                            ProfileActivity::class.java
-                        )
-
-                        startActivity(intent)
-
+            // 3. Acciones al presionar cada opción
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    0 -> startActivity(Intent(this, ProfileActivity::class.java))
+                    1 -> startActivity(Intent(this, EditarPerfilActivity::class.java))
+                    2 -> startActivity(Intent(this, PublicarActivity::class.java))
+                    3 -> startActivity(Intent(this, FavoritosActivity::class.java))
+                    4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
+                    5 -> startActivity(Intent(this, AgendarCitaActivity::class.java))
+                    6 -> startActivity(Intent(this, HistorialComprasActivity::class.java))
+                    7 -> startActivity(Intent(this, HistorialPagosActivity::class.java))
+                    8 -> {
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finishAffinity()
                     }
-
-                    // EDITAR PERFIL
-                    "✏️ Editar perfil" -> {
-
-                        val intent = Intent(
-                            this,
-                            EditarPerfilActivity::class.java
-                        )
-
-                        startActivity(intent)
-
-                    }
-
-                    // PUBLICAR
-                    "🏢 Vincular negocio" -> {
-
-                        val intent = Intent(
-                            this,
-                            PublicarActivity::class.java
-                        )
-
-                        startActivity(intent)
-
-                    }
-
-                    // FAVORITOS
-                    "❤️ Favoritos" -> {
-
-                        val intent = Intent(
-                            this,
-                            FavoritosActivity::class.java
-                        )
-
-                        startActivity(intent)
-
-                    }
-
-                    // CITAS
-                    "📅 Agendar citas" -> {
-
-                        val intent = Intent(
-                            this,
-                            AgendarCitaActivity::class.java
-                        )
-                        startActivity(intent)
-
-                    }
-
-                    // CERRAR SESION
-                    "🚪 Cerrar sesión" -> {
-
-                        val intent = Intent(
-                            this,
-                            MainActivity::class.java
-                        )
-
-                        startActivity(intent)
-
-                        finish()
-
-                    }
-
                 }
-
                 true
-
             }
-
             popupMenu.show()
-
         }
-
-        // =========================
-        // CATEGORIAS
-        // =========================
-
-        // TECNOLOGIA
-        cardTecnologia.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                MarketplaceActivity::class.java
-            )
-
-            intent.putExtra(
-                "categoria",
-                "tecnologia"
-            )
-
-            startActivity(intent)
-
-        }
-
-        // ROPA
-        cardRopa.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                MarketplaceActivity::class.java
-            )
-
-            intent.putExtra(
-                "categoria",
-                "ropa"
-            )
-
-            startActivity(intent)
-
-        }
-
-        // SPA
-        cardSpa.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                MarketplaceActivity::class.java
-            )
-
-            intent.putExtra(
-                "categoria",
-                "spa"
-            )
-
-            startActivity(intent)
-
-        }
-
-        // =========================
-        // PRODUCTO IPHONE
-        // =========================
-
-        cardIphone.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                DetalleProductoActivity::class.java
-            )
-
-            startActivity(intent)
-
-        }
-
-        // =========================
-        // MENU LATERAL
-        // =========================
-
-        // INICIO
-        txtInicio.setOnClickListener {
-
-            Toast.makeText(
-                this,
-                "Ya estás en Inicio",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            drawerLayout.closeDrawer(GravityCompat.START)
-
-        }
-
-        // MARKETPLACE
-        txtMarketplace.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                MarketplaceActivity::class.java
-            )
-
-            startActivity(intent)
-
-            drawerLayout.closeDrawer(GravityCompat.START)
-
-        }
-
-        // PRODUCTOS
-        txtProductos.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                PublicarActivity::class.java
-            )
-
-            startActivity(intent)
-
-            drawerLayout.closeDrawer(GravityCompat.START)
-
-        }
-
-        // CERRAR SESION
-        txtCerrarSesion.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                MainActivity::class.java
-            )
-
-            startActivity(intent)
-
-            finish()
-
-        }
-
     }
 
-    // =========================
-    // BOTON ATRAS
-    // =========================
+    private fun cargarProductosDesdeBD() {
+        listaDeProductos.clear()
+        listaDeProductos.add(Producto("1", "iPhone 17 Pro", "$4.500.000", "Tecnología", R.drawable.iphone_17))
+        listaDeProductos.add(Producto("2", "Vestido Elegante", "$120.000", "Ropa", R.drawable.vestido))
+
+        val adapter = ProductosHomeAdapter(listaDeProductos)
+        rvProductosHome.adapter = adapter
+    }
+
+    private fun abrirMarketplaceConFiltro(categoria: String) {
+        val intent = Intent(this, MarketplaceActivity::class.java).apply {
+            // Sincronizado para usar la misma clave "categoria"
+            putExtra("categoria", categoria)
+        }
+        startActivity(intent)
+    }
+
+    override fun onPause() { super.onPause(); sliderHandler.removeCallbacks(sliderRunnable) }
+    override fun onResume() { super.onResume(); sliderHandler.postDelayed(sliderRunnable, 4000) }
 
     override fun onBackPressed() {
-
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-
             drawerLayout.closeDrawer(GravityCompat.START)
-
         } else {
-
             super.onBackPressed()
-
         }
-
     }
 
+    companion object {
+        const val EXTRA_ID_PRODUCTO = "extra_id_producto"
+    }
 }

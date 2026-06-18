@@ -1,47 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- CONTENIDO -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- FONDO -->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/fondo_logo"/>
 
-        <!-- OVERLAY -->
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#14000000"/>
 
-        <!-- TOPBAR -->
         <LinearLayout
             android:id="@+id/topBar"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="wrap_content"
+            android:minHeight="65dp"
             android:background="#1AFFFFFF"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="18dp">
 
-            <!-- MENU -->
             <ImageView
                 android:id="@+id/btnMenu"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/menu"/>
 
-            <!-- TITULO -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -52,7 +47,6 @@
                 android:textSize="22sp"
                 android:textStyle="bold"/>
 
-            <!-- PERFIL -->
             <ImageView
                 android:id="@+id/imgPerfil"
                 android:layout_width="38dp"
@@ -62,7 +56,6 @@
 
         </LinearLayout>
 
-        <!-- SCROLL -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -74,7 +67,6 @@
                 android:orientation="vertical"
                 android:padding="18dp">
 
-                <!-- CARD PRINCIPAL -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,15 +75,31 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- IMAGEN -->
-                    <ImageView
-                        android:id="@+id/imgProducto"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="260dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/iphone_17"/>
+                        android:layout_height="260dp">
 
-                    <!-- NOMBRE -->
+                        <ImageView
+                            android:id="@+id/imgProducto"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/iphone_17"/>
+
+                        <ImageView
+                            android:id="@+id/btnFavorito"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_margin="12dp"
+                            android:background="#66000000"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_corazon_vacio"
+                            android:clickable="true"
+                            android:focusable="true"/>
+                    </RelativeLayout>
+
                     <TextView
                         android:id="@+id/txtNombreProducto"
                         android:layout_width="wrap_content"
@@ -102,7 +110,6 @@
                         android:textSize="26sp"
                         android:textStyle="bold"/>
 
-                    <!-- PRECIO -->
                     <TextView
                         android:id="@+id/txtPrecio"
                         android:layout_width="wrap_content"
@@ -113,7 +120,6 @@
                         android:textSize="21sp"
                         android:textStyle="bold"/>
 
-                    <!-- UBICACION -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -122,7 +128,6 @@
                         android:textColor="#CCCCCC"
                         android:textSize="15sp"/>
 
-                    <!-- DESCRIPCION -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -133,7 +138,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
-                        android:id="@+id/txtDescripcion"
+                        android:id="@+id/txtTextDescripcion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -142,7 +147,6 @@
                         android:textColor="#D0D0D0"
                         android:textSize="16sp"/>
 
-                    <!-- VENDEDOR -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -191,7 +195,6 @@
 
                     </LinearLayout>
 
-                    <!-- BOTONES -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -199,7 +202,6 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <!-- CONTACTAR -->
                         <Button
                             android:id="@+id/btnContactar"
                             android:layout_width="0dp"
@@ -213,7 +215,6 @@
                             android:textSize="16sp"
                             android:textStyle="bold"/>
 
-                        <!-- COMPRAR -->
                         <Button
                             android:id="@+id/btnComprar"
                             android:layout_width="0dp"
@@ -237,7 +238,6 @@
 
     </RelativeLayout>
 
-    <!-- MENU LATERAL -->
     <LinearLayout
         android:id="@+id/menuLateral"
         android:layout_width="280dp"

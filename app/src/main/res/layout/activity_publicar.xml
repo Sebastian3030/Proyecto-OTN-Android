@@ -1,47 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- CONTENIDO PRINCIPAL -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- FONDO -->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/fondo_logo" />
 
-        <!-- OVERLAY -->
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#11000000"/>
 
-        <!-- TOPBAR -->
         <LinearLayout
             android:id="@+id/topBar"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="wrap_content"
+            android:minHeight="65dp"
             android:background="#1AFFFFFF"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="18dp">
 
-            <!-- MENU -->
             <ImageView
                 android:id="@+id/btnMenu"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/menu" />
 
-            <!-- TITULO -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -52,7 +46,6 @@
                 android:textSize="22sp"
                 android:textStyle="bold"/>
 
-            <!-- PERFIL -->
             <ImageView
                 android:id="@+id/imgPerfil"
                 android:layout_width="38dp"
@@ -62,7 +55,6 @@
 
         </LinearLayout>
 
-        <!-- SCROLL -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -75,7 +67,6 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- CARD -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,7 +75,6 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- TITULO -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -95,63 +85,60 @@
                         android:textSize="26sp"
                         android:textStyle="bold"/>
 
-                    <!-- IMAGEN -->
                     <LinearLayout
+                        android:id="@+id/btnSeleccionarImagen"
                         android:layout_width="match_parent"
                         android:layout_height="220dp"
                         android:layout_marginBottom="20dp"
                         android:background="#1AFFFFFF"
                         android:gravity="center"
-                        android:orientation="vertical">
-
-                        <!--
-                        TEMPORAL:
-                        Esta imagen es simulada mientras
-                        se conecta el backend y la subida
-                        real de imágenes.
-                        -->
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
                         <ImageView
-                            android:layout_width="120dp"
-                            android:layout_height="120dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/iphone_17"/>
+                            android:id="@+id/imgPrevisualizacion"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:scaleType="centerInside"
+                            android:src="@android:drawable/ic_menu_camera"/>
 
                         <TextView
+                            android:id="@+id/txtAgregarImagenes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Agregar imágenes"
+                            android:text="Toca para agregar imagen de galería"
                             android:textColor="#FFFFFF"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"/>
 
                     </LinearLayout>
 
-                    <!-- NOMBRE -->
                     <EditText
+                        android:id="@+id/etNombre"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginBottom="15dp"
                         android:background="#33FFFFFF"
                         android:hint=" Nombre del producto"
                         android:padding="15dp"
+                        android:inputType="textCapSentences"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#CCCCCC"/>
 
-                    <!-- CATEGORIA -->
-                    <EditText
+                    <Spinner
+                        android:id="@+id/spinnerCategoria"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginBottom="15dp"
                         android:background="#33FFFFFF"
-                        android:hint=" Categoría"
                         android:padding="15dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#CCCCCC"/>
+                        android:popupBackground="#0E1A2B" />
 
-                    <!-- PRECIO -->
                     <EditText
+                        android:id="@+id/etPrecio"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginBottom="15dp"
@@ -162,8 +149,8 @@
                         android:textColor="#FFFFFF"
                         android:textColorHint="#CCCCCC"/>
 
-                    <!-- CONTACTO -->
                     <EditText
+                        android:id="@+id/etContacto"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginBottom="15dp"
@@ -174,8 +161,20 @@
                         android:textColor="#FFFFFF"
                         android:textColorHint="#CCCCCC"/>
 
-                    <!-- DESCRIPCION -->
                     <EditText
+                        android:id="@+id/etUbicacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="#33FFFFFF"
+                        android:hint=" Ubicación (Ej: Bogotá, Colombia)"
+                        android:inputType="textPostalAddress"
+                        android:padding="15dp"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#CCCCCC"/>
+
+                    <EditText
+                        android:id="@+id/etDescripcion"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:layout_marginBottom="20dp"
@@ -183,10 +182,10 @@
                         android:gravity="top"
                         android:hint=" Descripción del producto"
                         android:padding="15dp"
+                        android:inputType="textMultiLine"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#CCCCCC"/>
 
-                    <!-- BOTON -->
                     <Button
                         android:id="@+id/btnPublicar"
                         android:layout_width="match_parent"
@@ -205,7 +204,6 @@
 
     </RelativeLayout>
 
-    <!-- MENU LATERAL -->
     <LinearLayout
         android:id="@+id/menuLateral"
         android:layout_width="280dp"
@@ -215,7 +213,6 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- INICIO -->
         <TextView
             android:id="@+id/txtInicio"
             android:layout_width="wrap_content"
@@ -225,7 +222,6 @@
             android:textColor="#FFFFFF"
             android:textSize="20sp"/>
 
-        <!-- MARKETPLACE -->
         <TextView
             android:id="@+id/txtMarketplace"
             android:layout_width="wrap_content"
@@ -235,7 +231,6 @@
             android:textColor="#FFFFFF"
             android:textSize="20sp"/>
 
-        <!-- PUBLICAR -->
         <TextView
             android:id="@+id/txtProductos"
             android:layout_width="wrap_content"
@@ -246,7 +241,6 @@
             android:textSize="20sp"
             android:textStyle="bold"/>
 
-        <!-- CERRAR SESION -->
         <TextView
             android:id="@+id/txtCerrarSesion"
             android:layout_width="wrap_content"

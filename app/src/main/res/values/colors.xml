@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
 
-    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
-
-        <!-- Fondo -->
-        <item name="android:popupBackground">#0E1A2B</item>
-
-        <!-- Color texto -->
-        <item name="android:textColor">#FFFFFF</item>
-
-    </style>
+    <color name="azul_publicar">#0066FF</color>
+    <color name="celeste_otn">#4FC3F7</color>
+    <color name="fondo_oscuro_menu">#0E1A2B</color>
+    <color name="tarjeta_oscura">#222222</color>
 </resources>

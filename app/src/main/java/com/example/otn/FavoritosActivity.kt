@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 
 class FavoritosActivity : AppCompatActivity() {
@@ -41,6 +44,19 @@ class FavoritosActivity : AppCompatActivity() {
         txtProductos = findViewById(R.id.txtProductos)
         txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
 
+        // EVITAR QUE EL PUNCH HOLE DE LA CÁMARA TAPARA LA TOPBAR
+        val topBar = findViewById<LinearLayout>(R.id.topBar)
+        ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
+            val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.setPadding(
+                view.paddingLeft,
+                statusBarInsets.top, // Se añade la medida exacta del agujero/barra superior
+                view.paddingRight,
+                view.paddingBottom
+            )
+            insets
+        }
+
         // ABRIR MENU
         btnMenu.setOnClickListener {
 
@@ -49,118 +65,49 @@ class FavoritosActivity : AppCompatActivity() {
         }
 
         // MENU PERFIL
+        // POPUP MENÚ PERFIL - SOLUCIÓN DEFINITIVA MATERIAL 3 (COMO EL HOME)
         imgPerfil.setOnClickListener {
+            // 1. Inflamos el menú usando un Contexto con el tema oscuro de tu App
+            val contextoOscuro = androidx.appcompat.view.ContextThemeWrapper(this, R.style.PopupMenuStyle)
+            val popupMenu = PopupMenu(contextoOscuro, imgPerfil)
 
-            val popupMenu = PopupMenu(
-                this,
-                imgPerfil,
-                0,
-                0,
-                R.style.PopupMenuStyle
-            )
+            // 2. Agregamos las opciones
+            popupMenu.menu.add(0, 0, 0, "👤 Sebastian")
+            popupMenu.menu.add(0, 1, 1, "✏️ Editar perfil")
+            popupMenu.menu.add(0, 2, 2, "🏢 Vincular negocio")
+            popupMenu.menu.add(0, 3, 3, "❤️ Favoritos")
+            popupMenu.menu.add(0, 4, 4, "🗒️ Historial de citas")
+            popupMenu.menu.add(0, 5, 5, "📅 Agendar citas")
+            popupMenu.menu.add(0, 6, 6, "📖 Historial de compras")
+            popupMenu.menu.add(0, 7, 7, "💷 Historial de pagos")
+            popupMenu.menu.add(0, 8, 8, "🚪 Cerrar sesión")
 
-            popupMenu.menu.add("👤 Sebastian")
-            popupMenu.menu.add("✏️ Editar perfil")
-            popupMenu.menu.add("🏢 Vincular negocio")
-            popupMenu.menu.add("❤️ Favoritos")
-            popupMenu.menu.add("📅 Agendar citas")
-            popupMenu.menu.add("🚪 Cerrar sesión")
-
-            // TEXTO BLANCO
+            // 3. Forzamos el color del texto a blanco puro
             for (i in 0 until popupMenu.menu.size()) {
-
                 val menuItem = popupMenu.menu.getItem(i)
-
                 val spanString = SpannableString(menuItem.title)
-
-                spanString.setSpan(
-                    ForegroundColorSpan(Color.WHITE),
-                    0,
-                    spanString.length,
-                    0
-                )
-
+                spanString.setSpan(ForegroundColorSpan(Color.WHITE), 0, spanString.length, 0)
                 menuItem.title = spanString
-
             }
 
-            popupMenu.setOnMenuItemClickListener {
-
-                when (it.title.toString()) {
-
-                    "👤 Sebastian" -> {
-
-                        val intent = Intent(
-                            this,
-                            ProfileActivity::class.java
-                        )
-
-                        startActivity(intent)
-
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    0 -> startActivity(Intent(this, ProfileActivity::class.java))
+                    1 -> startActivity(Intent(this, EditarPerfilActivity::class.java))
+                    2 -> { /* Ya estamos aquí */ }
+                    3 -> startActivity(Intent(this, FavoritosActivity::class.java))
+                    4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
+                    5 -> startActivity(Intent(this, AgendarCitaActivity::class.java))
+                    6 -> startActivity(Intent(this, HistorialComprasActivity::class.java))
+                    7 -> startActivity(Intent(this, HistorialPagosActivity::class.java))
+                    8 -> {
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finishAffinity()
                     }
-
-                    "✏️ Editar perfil" -> {
-
-                        val intent = Intent(
-                            this,
-                            EditarPerfilActivity::class.java
-                        )
-
-                        startActivity(intent)
-
-                    }
-
-                    "🏢 Vincular negocio" -> {
-
-                        val intent = Intent(
-                            this,
-                            PublicarActivity::class.java
-                        )
-
-                        startActivity(intent)
-
-                    }
-
-                    "❤️ Favoritos" -> {
-
-                        Toast.makeText(
-                            this,
-                            "Ya estas en Tus favoritos",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                    }
-
-                    "📅 Agendar citas" -> {
-                        val intent = Intent(
-                            this,
-                            AgendarCitaActivity::class.java
-                        )
-                        startActivity(intent)
-
-                    }
-
-                    "🚪 Cerrar sesión" -> {
-
-                        val intent = Intent(
-                            this,
-                            MainActivity::class.java
-                        )
-
-                        startActivity(intent)
-
-                        finish()
-
-                    }
-
                 }
-
                 true
-
             }
-
             popupMenu.show()
-
         }
 
         // INICIO

@@ -1,47 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- CONTENIDO -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- FONDO -->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/fondo_logo"/>
 
-        <!-- OVERLAY -->
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#11000000"/>
 
-        <!-- TOPBAR -->
         <LinearLayout
             android:id="@+id/topBar"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="wrap_content"
+            android:minHeight="65dp"
             android:background="#1AFFFFFF"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="18dp">
 
-            <!-- MENU -->
             <ImageView
                 android:id="@+id/btnMenu"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/menu"/>
 
-            <!-- TITULO -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -52,7 +46,6 @@
                 android:textSize="22sp"
                 android:textStyle="bold"/>
 
-            <!-- PERFIL -->
             <ImageView
                 android:id="@+id/imgPerfil"
                 android:layout_width="38dp"
@@ -62,11 +55,11 @@
 
         </LinearLayout>
 
-        <!-- SCROLL -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/topBar">
+            android:layout_below="@id/topBar"
+            android:paddingBottom="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -74,7 +67,6 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- CARD -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,26 +75,47 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- FOTO -->
-                    <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="15dp"
-                        android:src="@drawable/perfil"/>
-
-                    <!-- CAMBIAR FOTO -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="25dp"
-                        android:text="Cambiar foto"
-                        android:textColor="#00BFFF"
-                        android:textSize="16sp"
+                        android:layout_marginBottom="20dp"
+                        android:text="Mi Perfil"
+                        android:textColor="#FFFFFF"
+                        android:textSize="26sp"
                         android:textStyle="bold"/>
 
-                    <!-- NOMBRE -->
+                    <LinearLayout
+                        android:id="@+id/btnSeleccionarImagen"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="#1AFFFFFF"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/imgPrevisualizacion"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:scaleType="centerInside"
+                            android:src="@android:drawable/ic_menu_camera"/>
+
+                        <TextView
+                            android:id="@+id/txtAgregarImagenes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Toca para cambiar foto de perfil"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
                     <EditText
                         android:id="@+id/etNombre"
                         android:layout_width="match_parent"
@@ -115,7 +128,6 @@
                         android:textColor="#FFFFFF"
                         android:textColorHint="#CCCCCC"/>
 
-                    <!-- CORREO -->
                     <EditText
                         android:id="@+id/etCorreo"
                         android:layout_width="match_parent"
@@ -128,7 +140,6 @@
                         android:textColor="#FFFFFF"
                         android:textColorHint="#CCCCCC"/>
 
-                    <!-- TELEFONO -->
                     <EditText
                         android:id="@+id/etTelefono"
                         android:layout_width="match_parent"
@@ -141,7 +152,6 @@
                         android:textColor="#FFFFFF"
                         android:textColorHint="#CCCCCC"/>
 
-                    <!-- CIUDAD -->
                     <EditText
                         android:id="@+id/etCiudad"
                         android:layout_width="match_parent"
@@ -154,7 +164,6 @@
                         android:textColor="#FFFFFF"
                         android:textColorHint="#CCCCCC"/>
 
-                    <!-- DESCRIPCION -->
                     <EditText
                         android:id="@+id/etDescripcion"
                         android:layout_width="match_parent"
@@ -168,7 +177,6 @@
                         android:textColor="#FFFFFF"
                         android:textColorHint="#CCCCCC"/>
 
-                    <!-- BOTON -->
                     <Button
                         android:id="@+id/btnGuardar"
                         android:layout_width="match_parent"
@@ -186,7 +194,6 @@
 
     </RelativeLayout>
 
-    <!-- MENU LATERAL -->
     <LinearLayout
         android:id="@+id/menuLateral"
         android:layout_width="280dp"

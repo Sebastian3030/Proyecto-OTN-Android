@@ -12,79 +12,107 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OTN">
 
-        <!--CITA CONFIRMADA-->
-        <activity android:name=".CitaConfirmadaActivity"/>
+        <!--MIS PRODUCTOS-->
+        <activity android:name=".MisProductosActivity"
+            android:exported="false"/>
 
 
-
-        <!--AGENDAR CITA-->
-        <activity android:name=".AgendarCitaActivity"/>
-
-
-        <!--PAGO-->
-        <activity android:name=".PagoActivity"/>
-
-
-        <!--COMPRA -->
-        <activity android:name=".CompraActivity"/>
-
-
-        <!--CHAT -->
-        <activity android:name=".ChatActivity"/>
-
-
-        <!--DETALLES DEL PRODUCTO-->
+        <!-- HISTORIAL DE PAGOS -->
         <activity
-            android:name=".DetalleProductoActivity"/>
+            android:name=".HistorialPagosActivity"
+            android:exported="false" />
 
-
-        <!--FAVORITOS -->
+        <!-- HISTORIAL DE COMPRAS -->
         <activity
-            android:name=".FavoritosActivity"/>
+            android:name=".HistorialComprasActivity"
+            android:exported="false" />
 
-
-        <!-- Editar Perfil -->
+        <!-- CITA CONFIRMADA -->
         <activity
-            android:name=".EditarPerfilActivity"/>
+            android:name=".CitaConfirmadaActivity"
+            android:exported="false" />
 
-
-        <!-- Perfil -->
+        <!-- HISTORIAL DE CITAS -->
         <activity
-            android:name=".ProfileActivity"/>
+            android:name=".HistorialCitasActivity"
+            android:exported="false" />
 
-
+        <!-- AGENDAR CITA -->
         <activity
-            android:name=".MarketplaceActivity"/>
+            android:name=".AgendarCitaActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
 
-
-        <!-- Publicar -->
+        <!-- PAGO -->
         <activity
-            android:name=".PublicarActivity" />
+            android:name=".PagoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
 
-
-        <!-- Registro -->
+        <!-- COMPRA -->
         <activity
-            android:name=".RegisterActivity" />
+            android:name=".CompraActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
 
-        <!-- Home -->
+        <!-- CHAT -->
         <activity
-            android:name=".HomeActivity" />
+            android:name=".ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
-
-        <!-- Login principal -->
+        <!-- DETALLES DEL PRODUCTO -->
         <activity
+            android:name=".DetalleProductoActivity"
+            android:exported="false" />
 
+        <!-- FAVORITOS -->
+        <activity
+            android:name=".FavoritosActivity"
+            android:exported="false" />
+
+        <!-- EDITAR PERFIL -->
+        <activity
+            android:name=".EditarPerfilActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- PERFIL -->
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <!-- MARKETPLACE -->
+        <activity
+            android:name=".MarketplaceActivity"
+            android:exported="false" />
+
+        <!-- PUBLICAR -->
+        <activity
+            android:name=".PublicarActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- REGISTRO -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- HOME -->
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+
+        <!-- LOGIN PRINCIPAL (Única pública para arrancar la app) -->
+        <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-        </activity
-            >
+        </activity>
 
     </application>
 

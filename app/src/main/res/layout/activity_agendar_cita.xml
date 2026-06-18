@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawerLayout"
@@ -9,8 +8,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <!-- FONDO -->
 
         <ImageView
             android:layout_width="match_parent"
@@ -23,12 +20,11 @@
             android:layout_height="match_parent"
             android:background="#11000000"/>
 
-        <!-- TOPBAR -->
-
         <LinearLayout
             android:id="@+id/topBar"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="wrap_content"
+            android:minHeight="65dp"
             android:background="#1AFFFFFF"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -70,8 +66,6 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- SERVICIO -->
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -87,8 +81,6 @@
                     android:layout_marginTop="10dp"
                     android:background="#1AFFFFFF"/>
 
-                <!-- FECHA -->
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -98,27 +90,20 @@
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
+                <!-- AHORA ESTE TEXTVIEW ES EL BOTÓN INTERACTIVO -->
                 <TextView
                     android:id="@+id/txtFecha"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginTop="10dp"
                     android:background="#1AFFFFFF"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:paddingStart="15dp"
                     android:text="Seleccionar fecha"
-                    android:textColor="#FFFFFF"/>
-
-                <Button
-                    android:id="@+id/btnSeleccionarFecha"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="10dp"
-                    android:backgroundTint="#263238"
-                    android:text="SELECCIONAR FECHA"
-                    android:textColor="#FFFFFF"/>
-
-                <!-- HORA -->
+                    android:textColor="#FFFFFF"
+                    android:clickable="true"
+                    android:focusable="true"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -136,8 +121,6 @@
                     android:layout_marginTop="10dp"
                     android:background="#1AFFFFFF"/>
 
-                <!-- DATOS -->
-
                 <EditText
                     android:id="@+id/edtNombre"
                     android:layout_width="match_parent"
@@ -145,10 +128,12 @@
                     android:layout_marginTop="25dp"
                     android:background="#1AFFFFFF"
                     android:hint="Nombre completo"
+                    android:inputType="textPersonName"
                     android:padding="15dp"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#D0D0D0"/>
 
+                <!-- RESTRICCIÓN: TECLADO DE CORREO ELECTRÓNICO -->
                 <EditText
                     android:id="@+id/edtCorreo"
                     android:layout_width="match_parent"
@@ -156,10 +141,12 @@
                     android:layout_marginTop="15dp"
                     android:background="#1AFFFFFF"
                     android:hint="Correo electrónico"
+                    android:inputType="textEmailAddress"
                     android:padding="15dp"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#D0D0D0"/>
 
+                <!-- RESTRICCIÓN: TECLADO NUMÉRICO PARA TELÉFONO -->
                 <EditText
                     android:id="@+id/edtTelefono"
                     android:layout_width="match_parent"
@@ -167,6 +154,7 @@
                     android:layout_marginTop="15dp"
                     android:background="#1AFFFFFF"
                     android:hint="Teléfono"
+                    android:inputType="phone"
                     android:padding="15dp"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#D0D0D0"/>
@@ -186,5 +174,80 @@
         </ScrollView>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/menuLateral"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#0E1A2B"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:text="Menú OTN"
+            android:textColor="#4FC3F7"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txtInicio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="🏠  Inicio"
+            android:textColor="#FFFFFF"
+            android:textSize="19sp"/>
+
+        <TextView
+            android:id="@+id/txtMarketplace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="🛒  Marketplace"
+            android:textColor="#FFFFFF"
+            android:textSize="19sp"/>
+
+        <TextView
+            android:id="@+id/txtProductos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="📦  Mis Productos"
+            android:textColor="#FFFFFF"
+            android:textSize="19sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="15dp"
+            android:background="#26FFFFFF" />
+
+        <TextView
+            android:id="@+id/txtCerrarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="🚪  Cerrar sesión"
+            android:textColor="#FF5252"
+            android:textSize="19sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

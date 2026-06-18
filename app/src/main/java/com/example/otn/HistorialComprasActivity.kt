@@ -5,48 +5,46 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.widget.Button
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
-class ProfileActivity : AppCompatActivity() {
+class HistorialComprasActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
 
-    // VARIABLES MENÚ LATERAL
+    // CONTROLADORES DE ESTADO DE LA LISTA
+    private lateinit var cardSinCompras: LinearLayout
+    private lateinit var recyclerCompras: RecyclerView
+
+    // MENU LATERAL
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
     private lateinit var txtProductos: TextView
     private lateinit var txtCerrarSesion: TextView
 
-    // CONTENEDORES INTERNOS DE OPCIONES (TARJETAS GRANDES)
-    private lateinit var layoutFavoritos: LinearLayout
-    private lateinit var layoutCitas: LinearLayout
-    private lateinit var layoutPublicaciones: LinearLayout
-
-    // BOTONES DE ACCIÓN
-    private lateinit var btnEditarPerfil: Button
-    private lateinit var btnCerrarSesion: Button
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(R.layout.activity_historial_compras)
 
-        // 1. INICIALIZAR REFERENCIAS DE VISTAS
+        // DRAWER Y TOPBAR
         drawerLayout = findViewById(R.id.drawerLayout)
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
 
-        // 2. PARCHE PUNCH HOLE (EVITAR QUE LA CÁMARA TAPE LA TOPBAR)
+        // PARCHE PUNCH HOLE (EVITAR QUE LA CÁMARA TAPE LA TOPBAR)
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
@@ -59,50 +57,60 @@ class ProfileActivity : AppCompatActivity() {
             insets
         }
 
-        // 3. ENLAZAR COMPONENTES DEL MENÚ LATERAL
+        // VISTAS DE CONTROL
+        cardSinCompras = findViewById(R.id.cardSinCompras)
+        recyclerCompras = findViewById(R.id.recyclerCompras)
+
+        // CONFIGURACIÓN INICIAL DEL RECYCLERVIEW
+        recyclerCompras.layoutManager = LinearLayoutManager(this)
+
+        // --- NOTA PARA DESARROLLO ---
+        // Por defecto dejamos 'cardSinCompras' visible. Cuando vincules tu base de datos o API:
+        // Si hay compras: cardSinCompras.visibility = View.GONE; recyclerCompras.visibility = View.view.VISIBLE
+        // Si no hay compras: cardSinCompras.visibility = View.VISIBLE; recyclerCompras.visibility = View.GONE
+
+        // REFERENCIAS MENU LATERAL
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
         txtProductos = findViewById(R.id.txtProductos)
         txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
 
-        // 4. ENLAZAR CONTENEDORES DE OPCIONES INTERNAS
-        layoutFavoritos = findViewById(R.id.layoutFavoritos)
-        layoutCitas = findViewById(R.id.layoutCitas)
-        layoutPublicaciones = findViewById(R.id.layoutPublicaciones)
-
-        // 5. ENLAZAR BOTONES PRINCIPALES
-        btnEditarPerfil = findViewById(R.id.btnEditarPerfil)
-        btnCerrarSesion = findViewById(R.id.btnCerrarSesion)
-
         // ==========================================
-        // ACCIONES DEL MENÚ LATERAL DESPLEGABLE
+        // ACCIÓN MENÚ LATERAL (ABRIR)
         // ==========================================
         btnMenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        // ==========================================
+        // CLICS MENÚ LATERAL (NAVEGACIÓN)
+        // ==========================================
         txtInicio.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
-            drawerLayout.closeDrawer(GravityCompat.START)
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         txtMarketplace.setOnClickListener {
-            startActivity(Intent(this, MarketplaceActivity::class.java))
+            val intent = Intent(this, MarketplaceActivity::class.java)
+            startActivity(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         txtProductos.setOnClickListener {
-            startActivity(Intent(this, PublicarActivity::class.java))
+            val intent = Intent(this, PublicarActivity::class.java)
+            startActivity(intent)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         txtCerrarSesion.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             finishAffinity()
         }
 
         // ==========================================
-        // CONFIGURACIÓN DEL POPUP MENÚ (FOTO PERFIL)
+        // POPUP MENU PERFIL (SUPERIOR DERECHO)
         // ==========================================
         // POPUP MENÚ PERFIL - SOLUCIÓN DEFINITIVA MATERIAL 3 (COMO EL HOME)
         imgPerfil.setOnClickListener {
@@ -148,39 +156,8 @@ class ProfileActivity : AppCompatActivity() {
             }
             popupMenu.show()
         }
-
-        // ==========================================
-        // ACCIONES DE BOTONES Y TARJETAS INTERNAS
-        // ==========================================
-
-        // El botón te lleva directo a la pantalla de edición
-        btnEditarPerfil.setOnClickListener {
-            startActivity(Intent(this, EditarPerfilActivity::class.java))
-        }
-
-        // La tarjeta de favoritos abre tu FavoritosActivity
-        layoutFavoritos.setOnClickListener {
-            startActivity(Intent(this, FavoritosActivity::class.java))
-        }
-
-        // La tarjeta de citas abre tu HistorialCitasActivity
-        layoutCitas.setOnClickListener {
-            startActivity(Intent(this, HistorialCitasActivity::class.java))
-        }
-
-        // La tarjeta de publicaciones abre el Marketplace
-        layoutPublicaciones.setOnClickListener {
-            startActivity(Intent(this, MarketplaceActivity::class.java))
-        }
-
-        // El botón inferior cierra sesión limpiando el stack de pantallas
-        btnCerrarSesion.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finishAffinity()
-        }
     }
 
-    // CONTROL DE BOTÓN ATRÁS FÍSICO/SISTEMA
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
