@@ -5,19 +5,20 @@
     android:layout_height="match_parent">
 
     <!-- FONDO -->
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/fondo_logo" />
 
-    <!-- OVERLAY -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#11000000" />
 
     <!-- TOPBAR -->
+
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Cita Confirmada"
+            android:text="Detalle de Cita"
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -47,6 +48,7 @@
     </LinearLayout>
 
     <!-- CONTENIDO -->
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -59,7 +61,9 @@
             android:padding="20dp">
 
             <!-- CARD -->
+
             <LinearLayout
+                android:id="@+id/cardDetalleCita"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#1AFFFFFF"
@@ -69,7 +73,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="✓ Cita agendada correctamente"
+                    android:text="Información de la Cita"
                     android:textColor="#00BFFF"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -78,7 +82,8 @@
                     android:id="@+id/txtNombre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Nombre:"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
@@ -86,7 +91,8 @@
                     android:id="@+id/txtCorreo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Correo:"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
@@ -94,7 +100,8 @@
                     android:id="@+id/txtTelefono"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Teléfono:"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
@@ -102,7 +109,8 @@
                     android:id="@+id/txtServicio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Servicio:"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
@@ -110,7 +118,8 @@
                     android:id="@+id/txtFecha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Fecha:"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
@@ -118,32 +127,46 @@
                     android:id="@+id/txtHora"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Hora:"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp" />
 
+                <TextView
+                    android:id="@+id/txtEstado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="Estado: Pendiente"
+                    android:textColor="#00BFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <!-- BOTON CONFIRMAR -->
+
+                <Button
+                    android:id="@+id/btnConfirmar"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="25dp"
+                    android:backgroundTint="#00BCD4"
+                    android:text="CONFIRMAR CITA"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <!-- BOTON FINALIZAR -->
+
+                <Button
+                    android:id="@+id/btnFinalizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="#808980"
+                    android:text="FINALIZAR CITA"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
             </LinearLayout>
-
-            <Button
-                android:id="@+id/btnInicio"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="30dp"
-                android:backgroundTint="#00BFFF"
-                android:text="VOLVER AL INICIO"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/btnVerHistorial"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="15dp"
-                android:backgroundTint="#00BFFF"
-                android:text="VER HISTORIAL"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"/>
 
         </LinearLayout>
 
