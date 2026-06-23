@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,25 +28,21 @@ class EditarPerfilActivity : AppCompatActivity() {
     private lateinit var imgPerfil: ImageView
     private lateinit var btnGuardar: Button
 
-    // ELEMENTOS PARA CARGAR IMAGEN (IGUAL QUE EN PUBLICAR)
     private lateinit var btnSeleccionarImagen: LinearLayout
     private lateinit var imgPrevisualizacion: ImageView
     private var imagenSeleccionadaUri: Uri? = null
 
-    // ELEMENTOS DEL FORMULARIO
     private lateinit var etNombre: EditText
     private lateinit var etCorreo: EditText
     private lateinit var etTelefono: EditText
     private lateinit var etCiudad: EditText
     private lateinit var etDescripcion: EditText
 
-    // MENU LATERAL
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
     private lateinit var txtProductos: TextView
     private lateinit var txtCerrarSesion: TextView
 
-    // REGISTRO DE GALERÍA MODERNO (IGUAL QUE EN PUBLICAR)
     private val abrirGaleriaLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -60,40 +57,33 @@ class EditarPerfilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_perfil)
 
-        // 1. INICIALIZAR COMPONENTES PRINCIPALES
         drawerLayout = findViewById(R.id.drawerLayout)
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
         btnGuardar = findViewById(R.id.btnGuardar)
 
-        // 2. VINCULAR CONTENEDOR MULTIMEDIA (Nuevos IDs idénticos a publicar)
         btnSeleccionarImagen = findViewById(R.id.btnSeleccionarImagen)
         imgPrevisualizacion = findViewById(R.id.imgPrevisualizacion)
 
-        // 3. VINCULAR FORMULARIO
         etNombre = findViewById(R.id.etNombre)
         etCorreo = findViewById(R.id.etCorreo)
         etTelefono = findViewById(R.id.etTelefono)
         etCiudad = findViewById(R.id.etCiudad)
         etDescripcion = findViewById(R.id.etDescripcion)
 
-        // 4. COMPONENTES DEL MENÚ LATERAL
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
         txtProductos = findViewById(R.id.txtProductos)
         txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
 
-        // EVENTO PARA CARGAR IMAGEN
         btnSeleccionarImagen.setOnClickListener {
             abrirGaleriaLauncher.launch("image/*")
         }
 
-        // ABRIR MENÚ LATERAL
         btnMenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // EVITAR QUE EL PUNCH HOLE DE LA CÁMARA TAPARA LA TOPBAR
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
@@ -101,9 +91,9 @@ class EditarPerfilActivity : AppCompatActivity() {
             insets
         }
 
-        // POPUP MENÚ PERFIL - SOLUCIÓN DEFINITIVA CORREGIDA (COMO EL HOME)
+        // POPUP MENÚ PERFIL (Tema Oscuro Material 3 Unificado)
         imgPerfil.setOnClickListener {
-            val contextoOscuro = androidx.appcompat.view.ContextThemeWrapper(this, R.style.PopupMenuStyle)
+            val contextoOscuro = ContextThemeWrapper(this, R.style.PopupMenuStyle)
             val popupMenu = PopupMenu(contextoOscuro, imgPerfil)
 
             popupMenu.menu.add(0, 0, 0, "👤 Sebastian")
@@ -126,7 +116,6 @@ class EditarPerfilActivity : AppCompatActivity() {
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     0 -> startActivity(Intent(this, ProfileActivity::class.java))
-                    1 -> { /* Ya estamos aquí */ }
                     2 -> startActivity(Intent(this, PublicarActivity::class.java))
                     3 -> startActivity(Intent(this, FavoritosActivity::class.java))
                     4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
@@ -143,7 +132,6 @@ class EditarPerfilActivity : AppCompatActivity() {
             popupMenu.show()
         }
 
-        // GUARDAR CAMBIOS CON VALIDACIONES ESTRICTAS
         btnGuardar.setOnClickListener {
             val nombre = etNombre.text.toString().trim()
             val correo = etCorreo.text.toString().trim()
@@ -180,7 +168,6 @@ class EditarPerfilActivity : AppCompatActivity() {
             finish()
         }
 
-        // CLICS NAVEGACIÓN MENÚ LATERAL
         txtInicio.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)

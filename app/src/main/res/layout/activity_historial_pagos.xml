@@ -4,20 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- IMAGEN DE FONDO COMPARTIDA EN TU APP -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/fondo_logo" />
 
-    <!-- Capa oscura para dar legibilidad al texto -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#22000000"/>
 
-    <!-- TOPBAR (BARRA SUPERIOR) -->
     <LinearLayout
         android:id="@+id/topBarPagos"
         android:layout_width="match_parent"
@@ -50,169 +47,13 @@
 
     </LinearLayout>
 
-    <!-- LISTA DE TRANSACCIONES (SCROLL) -->
-    <ScrollView
+    <!-- 💡 CORRECCIÓN CRÍTICA: Se eliminó el ScrollView estático duro y se reemplazó por un RecyclerView dinámico -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerPagos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/topBarPagos">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- PAGO 1: IPHONE -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#1AFFFFFF"
-                android:orientation="horizontal"
-                android:padding="15dp"
-                android:layout_marginBottom="12dp"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Compra: iPhone 17 Pro Max"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:text="ID Transacción: #TX-98412"
-                        android:textColor="#D6D6D6"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Fecha: 10/06/2026 - 14:25"
-                        android:textColor="#4FC3F7"
-                        android:textSize="13sp"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-$4.500.000"
-                    android:textColor="#FF5252"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <!-- PAGO 2: SESIÓN DE SPA -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#1AFFFFFF"
-                android:orientation="horizontal"
-                android:padding="15dp"
-                android:layout_marginBottom="12dp"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Reserva: Masaje Relajante Completo"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:text="ID Transacción: #TX-97205"
-                        android:textColor="#D6D6D6"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Fecha: 04/05/2026 - 09:10"
-                        android:textColor="#4FC3F7"
-                        android:textSize="13sp"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-$120.000"
-                    android:textColor="#FF5252"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <!-- PAGO 3: VESTIDO -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#1AFFFFFF"
-                android:orientation="horizontal"
-                android:padding="15dp"
-                android:layout_marginBottom="12dp"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Compra: Vestido Elegante"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:text="ID Transacción: #TX-95110"
-                        android:textColor="#D6D6D6"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Fecha: 22/04/2026 - 18:40"
-                        android:textColor="#4FC3F7"
-                        android:textSize="13sp"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-$250.000"
-                    android:textColor="#FF5252"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
+        android:layout_below="@id/topBarPagos"
+        android:padding="16dp"
+        android:clipToPadding="false"/>
 
 </RelativeLayout>

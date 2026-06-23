@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -26,7 +27,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
 
-    // CARRUSEL
+    // CARRUSEL ANIMADO
     private lateinit var viewPagerCarrusel: ViewPager2
     private val sliderHandler = Handler(Looper.getMainLooper())
     private lateinit var sliderRunnable: Runnable
@@ -42,7 +43,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var cardRopa: LinearLayout
     private lateinit var cardSpa: LinearLayout
 
-    // RECYCLERVIEW (FEED DINÁMICO DE PRODUCTOS)
+    // RECYCLERVIEW
     private lateinit var rvProductosHome: RecyclerView
     private var listaDeProductos = ArrayList<Producto>()
 
@@ -50,11 +51,12 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        // 1. INICIALIZAR VISTAS DE NAVEGACIÓN Y COMPONENTES
+        // 1. INICIALIZAR VISTAS
         drawerLayout = findViewById(R.id.drawerLayout)
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
 
+        // 2. PARCHE PUNCH HOLE (MUESCA DE CÁMARA)
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
@@ -62,10 +64,9 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
-        // 2. CONFIGURAR EL CARRUSEL
+        // 3. CONFIGURAR CARRUSEL DINÁMICO
         viewPagerCarrusel = findViewById(R.id.viewPagerCarrusel)
-
-        val listaImagenes: List<Any> = listOf(
+        val listaImagenes = listOf(
             R.drawable.vestido,
             R.drawable.sonidos,
             R.drawable.iphone_17,
@@ -74,25 +75,29 @@ class HomeActivity : AppCompatActivity() {
 
         viewPagerCarrusel.adapter = CarruselAdapter(listaImagenes) { position ->
             val intent = Intent(this, DetalleProductoActivity::class.java).apply {
-                putExtra(EXTRA_ID_PRODUCTO, "BANNER_PROD_$position")
+                putExtra("nombre", "Promoción Especial #${position + 1}")
+                putExtra("precio", "Ver detalles")
             }
             startActivity(intent)
         }
 
         sliderRunnable = Runnable {
-            var itemActual = viewPagerCarrusel.currentItem + 1
-            if (itemActual >= listaImagenes.size) itemActual = 0
-            viewPagerCarrusel.currentItem = itemActual
-            sliderHandler.postDelayed(sliderRunnable, 4000)
+            if (listaImagenes.isNotEmpty()) {
+                var itemActual = viewPagerCarrusel.currentItem + 1
+                if (itemActual >= listaImagenes.size) itemActual = 0
+                viewPagerCarrusel.currentItem = itemActual
+                sliderHandler.postDelayed(sliderRunnable, 4000)
+            }
         }
 
-        // 3. INICIALIZAR EL RECYCLERVIEW DINÁMICO
+        // 4. CONFIGURAR RECYCLERVIEW VERTICAL
         rvProductosHome = findViewById(R.id.rvProductosHome)
         rvProductosHome.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
+        // Llamado al método de carga controlado
         cargarProductosDesdeBD()
 
-        // 4. ENLAZAR COMPONENTES DEL MENÚ LATERAL Y CATEGORÍAS
+        // 5. ENLAZAR COMPONENTES DE NAVEGACIÓN Y CATEGORÍAS
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
         txtProductos = findViewById(R.id.txtProductos)
@@ -119,19 +124,15 @@ class HomeActivity : AppCompatActivity() {
             finishAffinity()
         }
 
-        // Aquí cambiamos los parámetros enviados a minúsculas exactas para que hagan juego con tu Marketplace
         cardTecnologia.setOnClickListener { abrirMarketplaceConFiltro("tecnologia") }
         cardRopa.setOnClickListener { abrirMarketplaceConFiltro("ropa") }
         cardSpa.setOnClickListener { abrirMarketplaceConFiltro("spa") }
 
-        // 5. POPUP MENÚ PERFIL
+        // 6. POPUP MENÚ PERFIL UNIFICADO MATERIAL 3
         imgPerfil.setOnClickListener {
-
-            // 1. Forzamos el contexto para que aplique el diseño oscuro de tu themes.xml
-            val contextWrapper = android.view.ContextThemeWrapper(this, R.style.PopupMenuStyle)
+            val contextWrapper = ContextThemeWrapper(this, R.style.PopupMenuStyle)
             val popupMenu = PopupMenu(contextWrapper, imgPerfil)
 
-            // 2. Cargamos las opciones del menú
             popupMenu.menu.add(0, 0, 0, "👤 Sebastian")
             popupMenu.menu.add(0, 1, 1, "✏️ Editar perfil")
             popupMenu.menu.add(0, 2, 2, "🏢 Vincular negocio")
@@ -142,10 +143,13 @@ class HomeActivity : AppCompatActivity() {
             popupMenu.menu.add(0, 7, 7, "💷 Historial de pagos")
             popupMenu.menu.add(0, 8, 8, "🚪 Cerrar sesión")
 
-            // ⚠️ RECUERDA: Si tenías un bucle "for" abajo que intentaba pintar las letras de blanco
-            // usando SpannableString, bórralo por completo. Ya no hace falta.
+            for (i in 0 until popupMenu.menu.size()) {
+                val menuItem = popupMenu.menu.getItem(i)
+                val spanString = SpannableString(menuItem.title)
+                spanString.setSpan(ForegroundColorSpan(Color.WHITE), 0, spanString.length, 0)
+                menuItem.title = spanString
+            }
 
-            // 3. Acciones al presionar cada opción
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     0 -> startActivity(Intent(this, ProfileActivity::class.java))
@@ -167,25 +171,37 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Simulación de respuesta de API reducida a 2 elementos requeridos.
+     * Mantiene intacta la estructura del modelo global "Producto".
+     */
     private fun cargarProductosDesdeBD() {
         listaDeProductos.clear()
-        listaDeProductos.add(Producto("1", "iPhone 17 Pro", "$4.500.000", "Tecnología", R.drawable.iphone_17))
-        listaDeProductos.add(Producto("2", "Vestido Elegante", "$120.000", "Ropa", R.drawable.vestido))
 
-        val adapter = ProductosHomeAdapter(listaDeProductos)
-        rvProductosHome.adapter = adapter
+        // Mantenemos solo 2 productos con la estructura limpia del objeto listo para JSON/BD
+        listaDeProductos.add(Producto("1", "iPhone 17 Pro", "$4.500.000", "tecnologia", R.drawable.iphone_17))
+        listaDeProductos.add(Producto("2", "Vestido Elegante", "$120.000", "ropa", R.drawable.vestido))
+
+        // Al presionar cualquiera, el ProductosHomeAdapter gestionará la navegación automática hacia el Detalle
+        rvProductosHome.adapter = ProductosHomeAdapter(listaDeProductos)
     }
 
     private fun abrirMarketplaceConFiltro(categoria: String) {
         val intent = Intent(this, MarketplaceActivity::class.java).apply {
-            // Sincronizado para usar la misma clave "categoria"
             putExtra("categoria", categoria)
         }
         startActivity(intent)
     }
 
-    override fun onPause() { super.onPause(); sliderHandler.removeCallbacks(sliderRunnable) }
-    override fun onResume() { super.onResume(); sliderHandler.postDelayed(sliderRunnable, 4000) }
+    override fun onPause() {
+        super.onPause()
+        sliderHandler.removeCallbacks(sliderRunnable)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sliderHandler.postDelayed(sliderRunnable, 4000)
+    }
 
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -193,9 +209,5 @@ class HomeActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
-    }
-
-    companion object {
-        const val EXTRA_ID_PRODUCTO = "extra_id_producto"
     }
 }

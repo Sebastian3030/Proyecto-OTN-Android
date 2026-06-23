@@ -12,7 +12,6 @@ import androidx.core.view.WindowInsetsCompat
 class DetalleCitaActivity : AppCompatActivity() {
 
     private lateinit var btnVolver: ImageView
-
     private lateinit var btnConfirmar: Button
     private lateinit var btnFinalizar: Button
 
@@ -28,127 +27,64 @@ class DetalleCitaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalle_cita)
 
-        // REFERENCIAS
+        btnVolver = findViewById(R.id.btnVolver)
+        btnConfirmar = findViewById(R.id.btnConfirmar)
+        btnFinalizar = findViewById(R.id.btnFinalizar)
 
-        btnVolver =
-            findViewById(R.id.btnVolver)
+        txtNombre = findViewById(R.id.txtNombre)
+        txtCorreo = findViewById(R.id.txtCorreo)
+        txtTelefono = findViewById(R.id.txtTelefono)
+        txtServicio = findViewById(R.id.txtServicio)
+        txtFecha = findViewById(R.id.txtFecha)
+        txtHora = findViewById(R.id.txtHora)
+        txtEstado = findViewById(R.id.txtEstado)
 
-        btnConfirmar =
-            findViewById(R.id.btnConfirmar)
-
-        btnFinalizar =
-            findViewById(R.id.btnFinalizar)
-
-        txtNombre =
-            findViewById(R.id.txtNombre)
-
-        txtCorreo =
-            findViewById(R.id.txtCorreo)
-
-        txtTelefono =
-            findViewById(R.id.txtTelefono)
-
-        txtServicio =
-            findViewById(R.id.txtServicio)
-
-        txtFecha =
-            findViewById(R.id.txtFecha)
-
-        txtHora =
-            findViewById(R.id.txtHora)
-
-        txtEstado =
-            findViewById(R.id.txtEstado)
-
-        // EVITAR QUE EL PUNCH HOLE DE LA CÁMARA TAPARA LA TOPBAR
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
-            view.setPadding(
-                view.paddingLeft,
-                statusBarInsets.top, // Se añade la medida exacta del agujero/barra superior
-                view.paddingRight,
-                view.paddingBottom
-            )
+            view.setPadding(view.paddingLeft, statusBarInsets.top, view.paddingRight, view.paddingBottom)
             insets
         }
 
-        // DATOS RECIBIDOS
+        // RECUPERACIÓN SEGURA DE DATOS
+        val nombre = intent.getStringExtra(EXTRA_DETALLE_NOMBRE) ?: ""
+        val correo = intent.getStringExtra(EXTRA_DETALLE_CORREO) ?: ""
+        val telefono = intent.getStringExtra(EXTRA_DETALLE_TELEFONO) ?: ""
+        val servicio = intent.getStringExtra(EXTRA_DETALLE_SERVICIO) ?: ""
+        val fecha = intent.getStringExtra(EXTRA_DETALLE_FECHA) ?: ""
+        val hora = intent.getStringExtra(EXTRA_DETALLE_HORA) ?: ""
+        var estado = intent.getStringExtra(EXTRA_DETALLE_ESTADO) ?: "Pendiente"
 
-        val nombre =
-            intent.getStringExtra("nombre") ?: ""
+        txtNombre.text = "Nombre: $nombre"
+        txtCorreo.text = "Correo: $correo"
+        txtTelefono.text = "Teléfono: $telefono"
+        txtServicio.text = "Servicio: $servicio"
+        txtFecha.text = "Fecha: $fecha"
+        txtHora.text = "Hora: $hora"
+        txtEstado.text = "Estado: $estado"
 
-        val correo =
-            intent.getStringExtra("correo") ?: ""
-
-        val telefono =
-            intent.getStringExtra("telefono") ?: ""
-
-        val servicio =
-            intent.getStringExtra("servicio") ?: ""
-
-        val fecha =
-            intent.getStringExtra("fecha") ?: ""
-
-        val hora =
-            intent.getStringExtra("hora") ?: ""
-
-        var estado =
-            intent.getStringExtra("estado") ?: "Pendiente"
-
-        // MOSTRAR DATOS
-
-        txtNombre.text =
-            "Nombre: $nombre"
-
-        txtCorreo.text =
-            "Correo: $correo"
-
-        txtTelefono.text =
-            "Teléfono: $telefono"
-
-        txtServicio.text =
-            "Servicio: $servicio"
-
-        txtFecha.text =
-            "Fecha: $fecha"
-
-        txtHora.text =
-            "Hora: $hora"
-
-        txtEstado.text =
-            "Estado: $estado"
-
-        // VOLVER
-
-        btnVolver.setOnClickListener {
-
-            finish()
-
-        }
-
-        // CONFIRMAR
+        btnVolver.setOnClickListener { finish() }
 
         btnConfirmar.setOnClickListener {
-
             estado = "Confirmada"
-
-            txtEstado.text =
-                "Estado: $estado"
-
+            txtEstado.text = "Estado: $estado"
+            // Aquí irá la actualización reactiva en tu Base de Datos
         }
-
-        // FINALIZAR
 
         btnFinalizar.setOnClickListener {
-
             estado = "Finalizada"
-
-            txtEstado.text =
-                "Estado: $estado"
-
+            txtEstado.text = "Estado: $estado"
+            // Aquí irá la actualización reactiva en tu Base de Datos
         }
-
     }
 
+    companion object {
+        const val EXTRA_DETALLE_NOMBRE = "nombre"
+        const val EXTRA_DETALLE_CORREO = "correo"
+        const val EXTRA_DETALLE_TELEFONO = "telefono"
+        const val EXTRA_DETALLE_SERVICIO = "servicio"
+        const val EXTRA_DETALLE_FECHA = "fecha"
+        const val EXTRA_DETALLE_HORA = "hora"
+        const val EXTRA_DETALLE_ESTADO = "estado"
+    }
 }

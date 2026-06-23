@@ -5,18 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ProductosHomeAdapter(private val listaProductos: List<Producto>) :
     RecyclerView.Adapter<ProductosHomeAdapter.ProductoViewHolder>() {
 
-    // Aquí solo necesitamos el ImageView porque tu diseño es una sola imagen grande
+    // 1. Vinculamos todos los componentes reales que encontramos en tu XML
     class ProductoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imgProducto: ImageView = view.findViewById(R.id.imgProducto)
+        val txtNombre: TextView = view.findViewById(R.id.txtNombreProducto)
+        val txtPrecio: TextView = view.findViewById(R.id.txtPrecioProducto)
+        val txtCategoria: TextView = view.findViewById(R.id.txtCategoriaProducto)
+        val txtUbicacion: TextView = view.findViewById(R.id.txtUbicacionProducto)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductoViewHolder {
-        // Enlaza con tu item_producto.xml (el que acabamos de dejar sin fondo blanco)
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_producto, parent, false)
         return ProductoViewHolder(view)
@@ -25,24 +29,30 @@ class ProductosHomeAdapter(private val listaProductos: List<Producto>) :
     override fun onBindViewHolder(holder: ProductoViewHolder, position: Int) {
         val producto = listaProductos[position]
 
-        // Pinta la imagen del producto (ej: el iPhone o el Vestido)
+        // 2. Pintamos los datos dinámicos que vienen de tu "API" (HomeActivity)
         holder.imgProducto.setImageResource(producto.imagen)
+        holder.txtNombre.text = producto.nombre
+        holder.txtPrecio.text = producto.precio
+        holder.txtCategoria.text = producto.categoria.replaceFirstChar { it.uppercase() }
 
-        // ========================================================
-        // ¡NUEVA FUNCIONALIDAD: ACCIÓN CLIC EN CADA PRODUCTO DEL HOME!
-        // ========================================================
-        holder.imgProducto.setOnClickListener { view ->
-            // Obtenemos el contexto desde la vista presionada
+        // Colocamos una ubicación por defecto en lo que integras el campo en el modelo Producto
+        holder.txtUbicacion.text = "Ubicación Disponible"
+
+        // ====================================================================
+        // OPTIMIZACIÓN DEL CLIC: Ahora se aplica a TODA la tarjeta (itemView)
+        // ====================================================================
+        holder.itemView.setOnClickListener { view ->
             val context = view.context
 
             // Creamos el Intent hacia la pantalla de detalle
-            val intent = Intent(context, DetalleProductoActivity::class.java)
+            val intent = Intent(context, DetalleProductoActivity::class.java).apply {
+                // Pasamos los datos dinámicos del producto seleccionado
+                putExtra("nombre", producto.nombre)
+                putExtra("precio", producto.precio)
+                putExtra("imagen", producto.imagen)
+            }
 
-            // Le pasamos los datos del producto actual de forma dinámica
-            intent.putExtra("nombre", producto.nombre)
-            intent.putExtra("precio", producto.precio)
-
-            // Iniciamos la nueva actividad
+            // Lanzamos la actividad
             context.startActivity(intent)
         }
     }

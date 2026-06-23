@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawerLayout"
@@ -10,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- FONDO -->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -22,7 +20,6 @@
             android:layout_height="match_parent"
             android:background="#11000000"/>
 
-        <!-- TOPBAR -->
         <LinearLayout
             android:id="@+id/topBar"
             android:layout_width="match_parent"
@@ -33,14 +30,12 @@
             android:orientation="horizontal"
             android:paddingHorizontal="18dp">
 
-            <!-- MENU -->
             <ImageView
                 android:id="@+id/btnMenu"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/menu" />
 
-            <!-- TITULO -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -51,7 +46,6 @@
                 android:textSize="22sp"
                 android:textStyle="bold"/>
 
-            <!-- PERFIL -->
             <ImageView
                 android:id="@+id/imgPerfil"
                 android:layout_width="38dp"
@@ -61,11 +55,11 @@
 
         </LinearLayout>
 
-        <!-- CONTENIDO -->
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/topBar">
+            android:layout_below="@id/topBar"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,14 +67,15 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- PRODUCTO -->
                 <ImageView
+                    android:id="@+id/imgProductoCompra"
                     android:layout_width="match_parent"
                     android:layout_height="220dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/iphone_17"/>
 
                 <TextView
+                    android:id="@+id/txtNombreProductoCompra"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -99,7 +94,6 @@
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
-                <!-- CANTIDAD -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -145,7 +139,6 @@
 
                 </LinearLayout>
 
-                <!-- METODO PAGO -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -155,15 +148,16 @@
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
+                <!-- 💡 OPTIMIZACIÓN: Se forzó el modo diálogo para el despliegue del Spinner -->
                 <Spinner
                     android:id="@+id/spinnerPago"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginTop="10dp"
                     android:background="#1AFFFFFF"
-                    android:paddingHorizontal="15dp"/>
+                    android:paddingHorizontal="15dp"
+                    android:spinnerMode="dialog"/>
 
-                <!-- RESUMEN -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -192,7 +186,6 @@
                     android:textSize="22sp"
                     android:textStyle="bold"/>
 
-                <!-- CONTINUAR -->
                 <Button
                     android:id="@+id/btnContinuar"
                     android:layout_width="match_parent"
@@ -205,9 +198,7 @@
                     android:textStyle="bold"/>
 
             </LinearLayout>
-
-        </ScrollView>
-
+        </androidx.core.widget.NestedScrollView>
     </RelativeLayout>
 
     <!-- MENU LATERAL -->
@@ -247,16 +238,19 @@
             android:textColor="#FFFFFF"
             android:textSize="20sp"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="15dp"
+            android:background="#26FFFFFF"/>
+
         <TextView
             android:id="@+id/txtCerrarSesion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
             android:text="🚪 Cerrar sesión"
             android:textColor="#FF5252"
             android:textSize="20sp"
             android:textStyle="bold"/>
-
     </LinearLayout>
-
 </androidx.drawerlayout.widget.DrawerLayout>

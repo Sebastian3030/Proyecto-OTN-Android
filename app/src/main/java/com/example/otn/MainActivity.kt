@@ -19,51 +19,44 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Referencias
         etCorreo = findViewById(R.id.etCorreo)
         etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btnLogin)
         txtRegistro = findViewById(R.id.txtRegistro)
 
-        // LOGIN
         btnLogin.setOnClickListener {
+            val correo = etCorreo.text.toString().trim()
+            val password = etPassword.text.toString().trim()
 
-            val correo = etCorreo.text.toString()
-            val password = etPassword.text.toString()
+            // Validaciones locales antes de enviar al servidor
+            if (correo.isEmpty()) {
+                etCorreo.error = "El correo es obligatorio"
+                etCorreo.requestFocus()
+                return@setOnClickListener
+            }
 
-            // Usuario temporal
+            if (password.isEmpty()) {
+                etPassword.error = "La contraseña es obligatoria"
+                etPassword.requestFocus()
+                return@setOnClickListener
+            }
+
+            // --- ESPACIO PARA CONEXIÓN BACKEND (Firebase / API Rest) ---
+            // Aquí reemplazarás este bloque por tu llamada de autenticación real
             val correoCorrecto = "admin"
             val passwordCorrecta = "1234"
 
             if (correo == correoCorrecto && password == passwordCorrecta) {
-
-                Toast.makeText(
-                    this,
-                    "Bienvenido a OTN",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                // Ir al Home
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-
+                Toast.makeText(this, "Bienvenido a OTN", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish() // Eliminamos login de la pila para que no regresen con botón atrás
             } else {
-
-                Toast.makeText(
-                    this,
-                    "Correo o contraseña incorrectos",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+                Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Ir a registro
         txtRegistro.setOnClickListener {
-
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 }

@@ -27,7 +27,6 @@ class CitaConfirmadaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cita_confirmada)
 
-        // REFERENCIAS VISTAS
         btnVolver = findViewById(R.id.btnVolver)
         btnInicio = findViewById(R.id.btnInicio)
         btnVerHistorial = findViewById(R.id.btnVerHistorial)
@@ -39,22 +38,14 @@ class CitaConfirmadaActivity : AppCompatActivity() {
         txtFecha = findViewById(R.id.txtFecha)
         txtHora = findViewById(R.id.txtHora)
 
-        // EVITAR QUE EL PUNCH HOLE DE LA CÁMARA TAPARA LA TOPBAR
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
-            view.setPadding(
-                view.paddingLeft,
-                statusBarInsets.top,
-                view.paddingRight,
-                view.paddingBottom
-            )
+            view.setPadding(view.paddingLeft, statusBarInsets.top, view.paddingRight, view.paddingBottom)
             insets
         }
 
-        // ======================================================================
-        // RECUPERACIÓN DE DATOS (Usando llaves seguras del companion object)
-        // ======================================================================
+        // Recuperación de extras segura
         val nombre = intent.getStringExtra(EXTRA_NOMBRE) ?: "No disponible"
         val correo = intent.getStringExtra(EXTRA_CORREO) ?: "No disponible"
         val telefono = intent.getStringExtra(EXTRA_TELEFONO) ?: "No disponible"
@@ -62,7 +53,6 @@ class CitaConfirmadaActivity : AppCompatActivity() {
         val fecha = intent.getStringExtra(EXTRA_FECHA) ?: "No disponible"
         val hora = intent.getStringExtra(EXTRA_HORA) ?: "No disponible"
 
-        // MOSTRAR DATOS EN LA INTERFAZ
         txtNombre.text = "Nombre: $nombre"
         txtCorreo.text = "Correo: $correo"
         txtTelefono.text = "Teléfono: $telefono"
@@ -70,12 +60,8 @@ class CitaConfirmadaActivity : AppCompatActivity() {
         txtFecha.text = "Fecha: $fecha"
         txtHora.text = "Hora: $hora"
 
-        // BOTÓN VOLVER
-        btnVolver.setOnClickListener {
-            finish()
-        }
+        btnVolver.setOnClickListener { finish() }
 
-        // BOTÓN INICIO (Limpia el stack para que no puedan regresar aquí con el botón físico)
         btnInicio.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -83,7 +69,6 @@ class CitaConfirmadaActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // BOTÓN VER HISTORIAL
         btnVerHistorial.setOnClickListener {
             val intent = Intent(this, HistorialCitasActivity::class.java).apply {
                 putExtra(EXTRA_NOMBRE, nombre)
@@ -97,9 +82,6 @@ class CitaConfirmadaActivity : AppCompatActivity() {
         }
     }
 
-    // ======================================================================
-    // LLAVES COMPANION OBJECT: Estándar profesional para no perder datos
-    // ======================================================================
     companion object {
         const val EXTRA_NOMBRE = "extra_nombre"
         const val EXTRA_CORREO = "extra_correo"

@@ -4,59 +4,85 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
 import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
-import android.view.ContextThemeWrapper
-import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MarketplaceActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
+    private lateinit var etBuscador: EditText
 
-    // MENU
+    // MENU LATERAL
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
     private lateinit var txtPublicar: TextView
     private lateinit var txtCerrarSesion: TextView
 
-    // BOTONES
+    // BOTONES FILTROS
     private lateinit var btnTodos: Button
     private lateinit var btnTecnologia: Button
     private lateinit var btnRopa: Button
     private lateinit var btnSpa: Button
 
-    // CARDS
-    private lateinit var cardTec1: View
-    private lateinit var cardTec2: View
-    private lateinit var cardRopa1: View
-    private lateinit var cardRopa2: View
-    private lateinit var cardSpa1: View
-    private lateinit var cardSpa2: View
+    // RECYCLERVIEW DINÁMICO
+    private lateinit var rvMarketplace: RecyclerView
+    private var listaCompletaProductos = ArrayList<Producto>()
+    private var listaFiltradaProductos = ArrayList<Producto>()
+    private lateinit var adapter: ProductosHomeAdapter // Reutilizamos tu adaptador de productos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_marketplace)
 
-        // DRAWER
+        // 1. VINCULAR VISTAS EXACTAS DE TU XML
         drawerLayout = findViewById(R.id.drawerLayout)
-
-        // TOPBAR
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
+        etBuscador = findViewById(R.id.etBuscador)
 
+        txtInicio = findViewById(R.id.txtInicio)
+        txtMarketplace = findViewById(R.id.txtMarketplace)
+        txtPublicar = findViewById(R.id.txtPublicar)
+        txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
+
+        btnTodos = findViewById(R.id.btnTodos)
+        btnTecnologia = findViewById(R.id.btnTecnologia)
+        btnRopa = findViewById(R.id.btnRopa)
+        btnSpa = findViewById(R.id.btnSpa)
+
+        rvMarketplace = findViewById(R.id.rvMarketplace)
+
+        // 2. CONFIGURAR EL RECYCLERVIEW EN GRILLA (2 Columnas)
+        rvMarketplace.layoutManager = GridLayoutManager(this, 2)
+
+        // Cargar la lista base de prueba (simulando tu BD)
+        generarProductosMock()
+
+        // Inicializamos el adaptador con la lista filtrada (al inicio muestra todos)
+        listaFiltradaProductos.addAll(listaCompletaProductos)
+        adapter = ProductosHomeAdapter(listaFiltradaProductos)
+        rvMarketplace.adapter = adapter
+
+        // 3. PARCHE PUNCH HOLE (Muesca de la cámara)
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
@@ -64,37 +90,29 @@ class MarketplaceActivity : AppCompatActivity() {
             insets
         }
 
-        // MENU
-        txtInicio = findViewById(R.id.txtInicio)
-        txtMarketplace = findViewById(R.id.txtMarketplace)
-        txtPublicar = findViewById(R.id.txtPublicar)
-        txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
-
-        // BOTONES
-        btnTodos = findViewById(R.id.btnTodos)
-        btnTecnologia = findViewById(R.id.btnTecnologia)
-        btnRopa = findViewById(R.id.btnRopa)
-        btnSpa = findViewById(R.id.btnSpa)
-
-        // CARDS
-        cardTec1 = findViewById(R.id.cardTec1)
-        cardTec2 = findViewById(R.id.cardTec2)
-        cardRopa1 = findViewById(R.id.cardRopa1)
-        cardRopa2 = findViewById(R.id.cardRopa2)
-        cardSpa1 = findViewById(R.id.cardSpa1)
-        cardSpa2 = findViewById(R.id.cardSpa2)
-
-        // ABRIR MENU
+        // 4. ACCIÓN BOTÓN MENÚ LATERAL
         btnMenu.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
 
-        // MENU PERFIL OPTIMIZADO (FONDO OSCURO INTEGRADO)
-        // POPUP MENÚ PERFIL - SOLUCIÓN DEFINITIVA MATERIAL 3 (COMO EL HOME)
+        // 5. NAVEGACIÓN MENÚ LATERAL
+        txtInicio.setOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        }
+        txtMarketplace.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
+        txtPublicar.setOnClickListener {
+            startActivity(Intent(this, PublicarActivity::class.java))
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        txtCerrarSesion.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finishAffinity()
+        }
+
+        // 6. POPUP MENU PERFIL UNIFICADO
         imgPerfil.setOnClickListener {
-            // 1. Inflamos el menú usando un Contexto con el tema oscuro de tu App
-            val contextoOscuro = androidx.appcompat.view.ContextThemeWrapper(this, R.style.PopupMenuStyle)
+            val contextoOscuro = ContextThemeWrapper(this, R.style.PopupMenuStyle)
             val popupMenu = PopupMenu(contextoOscuro, imgPerfil)
 
-            // 2. Agregamos las opciones
             popupMenu.menu.add(0, 0, 0, "👤 Sebastian")
             popupMenu.menu.add(0, 1, 1, "✏️ Editar perfil")
             popupMenu.menu.add(0, 2, 2, "🏢 Vincular negocio")
@@ -105,7 +123,6 @@ class MarketplaceActivity : AppCompatActivity() {
             popupMenu.menu.add(0, 7, 7, "💷 Historial de pagos")
             popupMenu.menu.add(0, 8, 8, "🚪 Cerrar sesión")
 
-            // 3. Forzamos el color del texto a blanco puro
             for (i in 0 until popupMenu.menu.size()) {
                 val menuItem = popupMenu.menu.getItem(i)
                 val spanString = SpannableString(menuItem.title)
@@ -117,7 +134,7 @@ class MarketplaceActivity : AppCompatActivity() {
                 when (item.itemId) {
                     0 -> startActivity(Intent(this, ProfileActivity::class.java))
                     1 -> startActivity(Intent(this, EditarPerfilActivity::class.java))
-                    2 -> { /* Ya estamos aquí */ }
+                    2 -> startActivity(Intent(this, PublicarActivity::class.java))
                     3 -> startActivity(Intent(this, FavoritosActivity::class.java))
                     4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
                     5 -> startActivity(Intent(this, AgendarCitaActivity::class.java))
@@ -133,159 +150,71 @@ class MarketplaceActivity : AppCompatActivity() {
             popupMenu.show()
         }
 
-        // NAVEGACIÓN MENÚ LATERAL
-        txtInicio.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
+        // 7. LÓGICA DE FILTRADO POR BOTONES
+        val categoriaInicial = intent.getStringExtra("categoria")
+        filtrarPorCategoria(categoriaInicial)
 
-        txtMarketplace.setOnClickListener {
-            Toast.makeText(this, "Ya estás en Marketplace", Toast.LENGTH_SHORT).show()
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
+        btnTodos.setOnClickListener { filtrarPorCategoria(null) }
+        btnTecnologia.setOnClickListener { filtrarPorCategoria("tecnologia") }
+        btnRopa.setOnClickListener { filtrarPorCategoria("ropa") }
+        btnSpa.setOnClickListener { filtrarPorCategoria("spa") }
 
-        txtPublicar.setOnClickListener {
-            startActivity(Intent(this, PublicarActivity::class.java))
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
-
-        txtCerrarSesion.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finishAffinity()
-        }
-
-        // ========================================================
-        // NUEVA NAVEGACIÓN: ENVIAR CLIC HACIA DETALLEPRODUCTOACTIVITY
-        // ========================================================
-
-        cardTec1.setOnClickListener {
-            val intent = Intent(this, DetalleProductoActivity::class.java)
-            intent.putExtra("nombre", "iPhone 15")
-            intent.putExtra("precio", "$4.500.000")
-            startActivity(intent)
-        }
-
-        cardTec2.setOnClickListener {
-            val intent = Intent(this, DetalleProductoActivity::class.java)
-            intent.putExtra("nombre", "Computador Gamer")
-            intent.putExtra("precio", "$3.200.000")
-            startActivity(intent)
-        }
-
-        cardRopa1.setOnClickListener {
-            val intent = Intent(this, DetalleProductoActivity::class.java)
-            intent.putExtra("nombre", "Chaqueta")
-            intent.putExtra("precio", "$180.000")
-            startActivity(intent)
-        }
-
-        cardRopa2.setOnClickListener {
-            val intent = Intent(this, DetalleProductoActivity::class.java)
-            intent.putExtra("nombre", "Vestido")
-            intent.putExtra("precio", "$220.000")
-            startActivity(intent)
-        }
-
-        cardSpa1.setOnClickListener {
-            val intent = Intent(this, DetalleProductoActivity::class.java)
-            intent.putExtra("nombre", "Spa relajante")
-            intent.putExtra("precio", "$120.000")
-            startActivity(intent)
-        }
-
-        cardSpa2.setOnClickListener {
-            val intent = Intent(this, DetalleProductoActivity::class.java)
-            intent.putExtra("nombre", "Masajes")
-            intent.putExtra("precio", "$90.000")
-            startActivity(intent)
-        }
-
-        // ==========================================
-        // LÓGICA LOGRADA: RECIBIR E INTERPRETAR FILTRO
-        // ==========================================
-        val categoria = intent.getStringExtra("categoria")
-
-        if (categoria != null) {
-            when (categoria) {
-                "tecnologia" -> {
-                    ocultarTodo()
-                    cardTec1.visibility = View.VISIBLE
-                    cardTec2.visibility = View.VISIBLE
-                    actualizarBotones(btnTecnologia)
-                }
-                "ropa" -> {
-                    ocultarTodo()
-                    cardRopa1.visibility = View.VISIBLE
-                    cardRopa2.visibility = View.VISIBLE
-                    actualizarBotones(btnRopa)
-                }
-                "spa" -> {
-                    ocultarTodo()
-                    cardSpa1.visibility = View.VISIBLE
-                    cardSpa2.visibility = View.VISIBLE
-                    actualizarBotones(btnSpa)
-                }
-                else -> {
-                    mostrarTodos()
-                    actualizarBotones(btnTodos)
-                }
+        // 8. LÓGICA DEL BUSCADOR DE TEXTO (Para buscar en tiempo real)
+        etBuscador.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                buscarProductoPorTexto(s.toString())
             }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    // Simulador de datos de tu Backend
+    private fun generarProductosMock() {
+        listaCompletaProductos.clear()
+        listaCompletaProductos.add(Producto("1", "iPhone 15", "$4.500.000", "tecnologia", R.drawable.iphone_17))
+        listaCompletaProductos.add(Producto("2", "Computador Gamer", "$3.200.000", "tecnologia", R.drawable.sonidos))
+        listaCompletaProductos.add(Producto("3", "Chaqueta Moderna", "$180.000", "ropa", R.drawable.vestido))
+        listaCompletaProductos.add(Producto("4", "Vestido Elegante", "$220.000", "ropa", R.drawable.vestido))
+        listaCompletaProductos.add(Producto("5", "Spa Relajante", "$120.000", "spa", R.drawable.masajes))
+        listaCompletaProductos.add(Producto("6", "Masajes Reductores", "$90.000", "spa", R.drawable.masajes))
+    }
+
+    private fun filtrarPorCategoria(categoria: String?) {
+        listaFiltradaProductos.clear()
+        if (categoria == null) {
+            listaFiltradaProductos.addAll(listaCompletaProductos)
+            actualizarEstiloBotones(btnTodos)
         } else {
-            mostrarTodos()
-            actualizarBotones(btnTodos)
+            val filtrados = listaCompletaProductos.filter { it.categoria.lowercase() == categoria.lowercase() }
+            listaFiltradaProductos.addAll(filtrados)
+            when (categoria) {
+                "tecnologia" -> actualizarEstiloBotones(btnTecnologia)
+                "ropa" -> actualizarEstiloBotones(btnRopa)
+                "spa" -> actualizarEstiloBotones(btnSpa)
+            }
         }
-
-        // ACCIONES DE FILTRO MANUAL DE BOTONES INTERNOS
-        btnTodos.setOnClickListener {
-            mostrarTodos()
-            actualizarBotones(btnTodos)
-        }
-
-        btnTecnologia.setOnClickListener {
-            ocultarTodo()
-            cardTec1.visibility = View.VISIBLE
-            cardTec2.visibility = View.VISIBLE
-            actualizarBotones(btnTecnologia)
-        }
-
-        btnRopa.setOnClickListener {
-            ocultarTodo()
-            cardRopa1.visibility = View.VISIBLE
-            cardRopa2.visibility = View.VISIBLE
-            actualizarBotones(btnRopa)
-        }
-
-        btnSpa.setOnClickListener {
-            ocultarTodo()
-            cardSpa1.visibility = View.VISIBLE
-            cardSpa2.visibility = View.VISIBLE
-            actualizarBotones(btnSpa)
-        }
+        adapter.notifyDataSetChanged()
     }
 
-    private fun mostrarTodos() {
-        cardTec1.visibility = View.VISIBLE
-        cardTec2.visibility = View.VISIBLE
-        cardRopa1.visibility = View.VISIBLE
-        cardRopa2.visibility = View.VISIBLE
-        cardSpa1.visibility = View.VISIBLE
-        cardSpa2.visibility = View.VISIBLE
+    private fun buscarProductoPorTexto(texto: String) {
+        val query = texto.lowercase().trim()
+        listaFiltradaProductos.clear()
+        if (query.isEmpty()) {
+            listaFiltradaProductos.addAll(listaCompletaProductos)
+        } else {
+            val filtrados = listaCompletaProductos.filter { it.nombre.lowercase().contains(query) }
+            listaFiltradaProductos.addAll(filtrados)
+        }
+        adapter.notifyDataSetChanged()
     }
 
-    private fun ocultarTodo() {
-        cardTec1.visibility = View.GONE
-        cardTec2.visibility = View.GONE
-        cardRopa1.visibility = View.GONE
-        cardRopa2.visibility = View.GONE
-        cardSpa1.visibility = View.GONE
-        cardSpa2.visibility = View.GONE
-    }
-
-    private fun actualizarBotones(botonActivo: Button) {
-        btnTodos.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#1AFFFFFF"))
-        btnTecnologia.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#1AFFFFFF"))
-        btnRopa.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#1AFFFFFF"))
-        btnSpa.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#1AFFFFFF"))
+    private fun actualizarEstiloBotones(botonActivo: Button) {
+        val colorInactivo = ColorStateList.valueOf(Color.parseColor("#1AFFFFFF"))
+        btnTodos.backgroundTintList = colorInactivo
+        btnTecnologia.backgroundTintList = colorInactivo
+        btnRopa.backgroundTintList = colorInactivo
+        btnSpa.backgroundTintList = colorInactivo
 
         botonActivo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#00BFFF"))
     }

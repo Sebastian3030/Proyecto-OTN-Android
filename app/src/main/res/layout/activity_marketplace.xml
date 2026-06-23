@@ -35,14 +35,12 @@
             android:orientation="horizontal"
             android:paddingHorizontal="18dp">
 
-            <!-- MENÚ HAMBURGUESA -->
             <ImageView
                 android:id="@+id/btnMenu"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/menu"/>
 
-            <!-- TÍTULO DE LA PANTALLA -->
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -53,7 +51,6 @@
                 android:textSize="22sp"
                 android:textStyle="bold"/>
 
-            <!-- FOTO DE PERFIL PERMANENTE -->
             <ImageView
                 android:id="@+id/imgPerfil"
                 android:layout_width="38dp"
@@ -63,11 +60,12 @@
 
         </LinearLayout>
 
-        <!-- CUERPO CON SCROLL -->
-        <ScrollView
+        <!-- CUERPO CON SCROLL OPTIMIZADO -->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/topBar">
+            android:layout_below="@id/topBar"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,9 +83,10 @@
                     android:hint="🔍 Buscar productos..."
                     android:padding="15dp"
                     android:textColor="#FFFFFF"
-                    android:textColorHint="#CCCCCC"/>
+                    android:textColorHint="#CCCCCC"
+                    android:inputType="text"/>
 
-                <!-- FILTROS POR CATEGORÍAS (SCROLL HORIZONTAL) -->
+                <!-- FILTROS POR CATEGORÍAS -->
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -137,223 +136,20 @@
 
                 </HorizontalScrollView>
 
-                <!-- REJILLA / GRID DE PRODUCTOS -->
-                <GridLayout
+                <!-- 💡 CORRECCIÓN CLAVE: Se cambió el GridLayout manual por un RecyclerView dinámico -->
+                <!-- Desde Kotlin le asignaremos un GridLayoutManager de 2 columnas -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvMarketplace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:columnCount="2">
+                    android:layout_marginTop="15dp"
+                    android:nestedScrollingEnabled="false" />
 
-                    <!-- TECNOLOGÍA 1 -->
-                    <LinearLayout
-                        android:id="@+id/cardTec1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="#26FFFFFF"
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/iphone_17"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="iPhone 15"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$4.500.000"
-                            android:textColor="#00BFFF"/>
-                    </LinearLayout>
-
-                    <!-- TECNOLOGÍA 2 -->
-                    <LinearLayout
-                        android:id="@+id/cardTec2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="#26FFFFFF"
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/computador"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Computador Gamer"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$3.200.000"
-                            android:textColor="#00BFFF"/>
-                    </LinearLayout>
-
-                    <!-- ROPA 1 -->
-                    <LinearLayout
-                        android:id="@+id/cardRopa1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="#26FFFFFF"
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ropa"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Chaqueta"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$180.000"
-                            android:textColor="#00BFFF"/>
-                    </LinearLayout>
-
-                    <!-- ROPA 2 -->
-                    <LinearLayout
-                        android:id="@+id/cardRopa2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="#26FFFFFF"
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/vestido"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Vestido"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$220.000"
-                            android:textColor="#00BFFF"/>
-                    </LinearLayout>
-
-                    <!-- SPA 1 -->
-                    <LinearLayout
-                        android:id="@+id/cardSpa1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="#26FFFFFF"
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/spa"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Spa relajante"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$120.000"
-                            android:textColor="#00BFFF"/>
-                    </LinearLayout>
-
-                    <!-- SPA 2 -->
-                    <LinearLayout
-                        android:id="@+id/cardSpa2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_margin="8dp"
-                        android:background="#26FFFFFF"
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/masajes"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Masajes"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$90.000"
-                            android:textColor="#00BFFF"/>
-                    </LinearLayout>
-
-                </GridLayout>
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </RelativeLayout>
 
-    <!-- MENÚ DE NAVEGACIÓN LATERAL (DRAWER) -->
+    <!-- MENÚ DE NAVEGACIÓN LATERAL -->
     <LinearLayout
         android:id="@+id/menuLateral"
         android:layout_width="280dp"

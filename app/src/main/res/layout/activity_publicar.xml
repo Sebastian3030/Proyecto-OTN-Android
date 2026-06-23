@@ -52,14 +52,13 @@
                 android:layout_height="38dp"
                 android:padding="5dp"
                 android:src="@drawable/perfil"/>
-
         </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/topBar"
-            android:paddingBottom="20dp">
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,7 +70,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#26FFFFFF"
-                    android:elevation="8dp"
                     android:orientation="vertical"
                     android:padding="20dp">
 
@@ -113,7 +111,6 @@
                             android:textColor="#FFFFFF"
                             android:textSize="14sp"
                             android:textStyle="bold"/>
-
                     </LinearLayout>
 
                     <EditText
@@ -134,8 +131,8 @@
                         android:layout_height="55dp"
                         android:layout_marginBottom="15dp"
                         android:background="#33FFFFFF"
-                        android:padding="15dp"
-                        android:popupBackground="#0E1A2B" />
+                        android:paddingHorizontal="15dp"
+                        android:spinnerMode="dialog" />
 
                     <EditText
                         android:id="@+id/etPrecio"
@@ -195,13 +192,9 @@
                         android:textColor="#FFFFFF"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
-
                 </LinearLayout>
-
             </LinearLayout>
-
         </ScrollView>
-
     </RelativeLayout>
 
     <LinearLayout
@@ -215,7 +208,7 @@
 
         <TextView
             android:id="@+id/txtInicio"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:text="🏠 Inicio"
@@ -224,7 +217,7 @@
 
         <TextView
             android:id="@+id/txtMarketplace"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="🛒 Marketplace"
@@ -233,24 +226,27 @@
 
         <TextView
             android:id="@+id/txtProductos"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="📦 Publicar"
+            android:text="📦 Mis Productos"
             android:textColor="#00BFFF"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="15dp"
+            android:background="#26FFFFFF"/>
+
         <TextView
             android:id="@+id/txtCerrarSesion"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
             android:text="🚪 Cerrar sesión"
             android:textColor="#FF5252"
             android:textSize="20sp"
             android:textStyle="bold"/>
-
     </LinearLayout>
-
 </androidx.drawerlayout.widget.DrawerLayout>

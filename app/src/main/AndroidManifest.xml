@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OTN">
 
+        <!--EDITAR PRODUCTOS-->
+        <activity android:name=".EditarProductoActivity"
+            android:exported="false"/>
+
+
+
         <!--MIS PRODUCTOS-->
         <activity android:name=".MisProductosActivity"
             android:exported="false"/>

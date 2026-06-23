@@ -11,6 +11,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,11 +20,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 class FavoritosActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
-
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
 
-    // MENU
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
     private lateinit var txtProductos: TextView
@@ -33,9 +32,7 @@ class FavoritosActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favoritos)
 
-        // REFERENCIAS
         drawerLayout = findViewById(R.id.drawerLayout)
-
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
 
@@ -44,34 +41,22 @@ class FavoritosActivity : AppCompatActivity() {
         txtProductos = findViewById(R.id.txtProductos)
         txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
 
-        // EVITAR QUE EL PUNCH HOLE DE LA CÁMARA TAPARA LA TOPBAR
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
-            view.setPadding(
-                view.paddingLeft,
-                statusBarInsets.top, // Se añade la medida exacta del agujero/barra superior
-                view.paddingRight,
-                view.paddingBottom
-            )
+            view.setPadding(view.paddingLeft, statusBarInsets.top, view.paddingRight, view.paddingBottom)
             insets
         }
 
-        // ABRIR MENU
         btnMenu.setOnClickListener {
-
             drawerLayout.openDrawer(GravityCompat.START)
-
         }
 
-        // MENU PERFIL
-        // POPUP MENÚ PERFIL - SOLUCIÓN DEFINITIVA MATERIAL 3 (COMO EL HOME)
+        // POPUP MENÚ PERFIL (Unificado)
         imgPerfil.setOnClickListener {
-            // 1. Inflamos el menú usando un Contexto con el tema oscuro de tu App
-            val contextoOscuro = androidx.appcompat.view.ContextThemeWrapper(this, R.style.PopupMenuStyle)
+            val contextoOscuro = ContextThemeWrapper(this, R.style.PopupMenuStyle)
             val popupMenu = PopupMenu(contextoOscuro, imgPerfil)
 
-            // 2. Agregamos las opciones
             popupMenu.menu.add(0, 0, 0, "👤 Sebastian")
             popupMenu.menu.add(0, 1, 1, "✏️ Editar perfil")
             popupMenu.menu.add(0, 2, 2, "🏢 Vincular negocio")
@@ -82,7 +67,6 @@ class FavoritosActivity : AppCompatActivity() {
             popupMenu.menu.add(0, 7, 7, "💷 Historial de pagos")
             popupMenu.menu.add(0, 8, 8, "🚪 Cerrar sesión")
 
-            // 3. Forzamos el color del texto a blanco puro
             for (i in 0 until popupMenu.menu.size()) {
                 val menuItem = popupMenu.menu.getItem(i)
                 val spanString = SpannableString(menuItem.title)
@@ -94,8 +78,7 @@ class FavoritosActivity : AppCompatActivity() {
                 when (item.itemId) {
                     0 -> startActivity(Intent(this, ProfileActivity::class.java))
                     1 -> startActivity(Intent(this, EditarPerfilActivity::class.java))
-                    2 -> { /* Ya estamos aquí */ }
-                    3 -> startActivity(Intent(this, FavoritosActivity::class.java))
+                    2 -> startActivity(Intent(this, PublicarActivity::class.java))
                     4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
                     5 -> startActivity(Intent(this, AgendarCitaActivity::class.java))
                     6 -> startActivity(Intent(this, HistorialComprasActivity::class.java))
@@ -110,77 +93,32 @@ class FavoritosActivity : AppCompatActivity() {
             popupMenu.show()
         }
 
-        // INICIO
         txtInicio.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                HomeActivity::class.java
-            )
-
-            startActivity(intent)
-
+            startActivity(Intent(this, HomeActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
-
         }
 
-        // MARKETPLACE
         txtMarketplace.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                MarketplaceActivity::class.java
-            )
-
-            startActivity(intent)
-
+            startActivity(Intent(this, MarketplaceActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
-
         }
 
-        // PUBLICAR
         txtProductos.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                PublicarActivity::class.java
-            )
-
-            startActivity(intent)
-
+            startActivity(Intent(this, PublicarActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
-
         }
 
-        // CERRAR SESION
         txtCerrarSesion.setOnClickListener {
-
-            val intent = Intent(
-                this,
-                MainActivity::class.java
-            )
-
-            startActivity(intent)
-
-            finish()
-
+            startActivity(Intent(this, MainActivity::class.java))
+            finishAffinity()
         }
-
     }
 
-    // BOTON ATRAS
     override fun onBackPressed() {
-
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-
             drawerLayout.closeDrawer(GravityCompat.START)
-
         } else {
-
             super.onBackPressed()
-
         }
-
     }
-
 }

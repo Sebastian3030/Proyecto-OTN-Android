@@ -14,10 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 class PagoActivity : AppCompatActivity() {
 
     private lateinit var btnVolver: ImageView
-
     private lateinit var txtMetodoPago: TextView
     private lateinit var txtTotalPagar: TextView
-
     private lateinit var layoutNequi: LinearLayout
     private lateinit var layoutBanco: LinearLayout
 
@@ -40,12 +38,10 @@ class PagoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pago)
 
-        // REFERENCIAS
+        // 1. ASIGNACIÓN DE VISTAS CON LOS IDS EXACTOS DE TU XML
         btnVolver = findViewById(R.id.btnVolver)
-
         txtMetodoPago = findViewById(R.id.txtMetodoPago)
         txtTotalPagar = findViewById(R.id.txtTotalPagar)
-
         layoutNequi = findViewById(R.id.layoutNequi)
         layoutBanco = findViewById(R.id.layoutBanco)
 
@@ -59,111 +55,64 @@ class PagoActivity : AppCompatActivity() {
 
         btnConfirmarPago = findViewById(R.id.btnConfirmarPago)
 
-        // DATOS RECIBIDOS
+        // 2. RECUPERAR LOS DATOS ENVIADOS DESDE COMPRAACTIVITY
         metodoPago = intent.getStringExtra("metodoPago") ?: ""
         total = intent.getIntExtra("total", 0)
 
+        // Asignar los valores a los textos de la interfaz
         txtMetodoPago.text = "Método de pago: $metodoPago"
+        txtTotalPagar.text = "Total: $" + String.format("%,d", total).replace(',', '.')
 
-        txtTotalPagar.text =
-            "Total: $" +
-                    String.format("%,d", total)
-                        .replace(',', '.')
-
-        // MOSTRAR FORMULARIO CORRECTO
+        // 3. CONTROL VISUAL DE FORMULARIOS SEGÚN EL MÉTODO SELECCIONADO
         layoutNequi.visibility = View.GONE
         layoutBanco.visibility = View.GONE
 
-        if (metodoPago == "Nequi") {
-
+        if (metodoPago.lowercase() == "nequi") {
             layoutNequi.visibility = View.VISIBLE
-
         } else {
-
             layoutBanco.visibility = View.VISIBLE
-
         }
 
-        // BOTON VOLVER
-        btnVolver.setOnClickListener {
+        // 4. ACCIONES DE LOS BOTONES
+        btnVolver.setOnClickListener { mostrarDialogoCancelar() }
 
-            mostrarDialogoCancelar()
-
-        }
-
-        // CONFIRMAR PAGO
         btnConfirmarPago.setOnClickListener {
+            if (metodoPago.lowercase() == "nequi") {
+                val celular = edtCelular.text.toString().trim()
+                val claveDinamica = edtClaveDinamica.text.toString().trim()
 
-            if (metodoPago == "Nequi") {
-
-                if (
-                    edtCelular.text.toString().trim().isEmpty() ||
-                    edtClaveDinamica.text.toString().trim().isEmpty()
-                ) {
-
-                    Toast.makeText(
-                        this,
-                        "Complete todos los campos",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                if (celular.isEmpty() || claveDinamica.isEmpty()) {
+                    Toast.makeText(this, "Complete todos los campos de Nequi", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-
             } else {
+                val titular = edtTitular.text.toString().trim()
+                val documento = edtDocumento.text.toString().trim()
+                val cuenta = edtCuenta.text.toString().trim()
+                val clave = edtClave.text.toString().trim()
 
-                if (
-                    edtTitular.text.toString().trim().isEmpty() ||
-                    edtDocumento.text.toString().trim().isEmpty() ||
-                    edtCuenta.text.toString().trim().isEmpty() ||
-                    edtClave.text.toString().trim().isEmpty()
-                ) {
-
-                    Toast.makeText(
-                        this,
-                        "Complete todos los campos",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                if (titular.isEmpty() || documento.isEmpty() || cuenta.isEmpty() || clave.isEmpty()) {
+                    Toast.makeText(this, "Complete todos los campos bancarios", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
-
             }
 
-
-
-
-            Toast.makeText(
-                this,
-                "Pago procesado correctamente",
-                Toast.LENGTH_LONG
-            ).show()
-
+            // Simulación de transacción exitosa
+            Toast.makeText(this, "Pago procesado correctamente", Toast.LENGTH_LONG).show()
+            finish()
         }
-
     }
 
     private fun mostrarDialogoCancelar() {
-
         AlertDialog.Builder(this)
             .setTitle("Cancelar transacción")
-            .setMessage(
-                "Si sales ahora perderás los datos ingresados. ¿Deseas cancelar la compra?"
-            )
-            .setPositiveButton("Sí") { _, _ ->
-
-                finish()
-
-            }
+            .setMessage("Si sales ahora perderás los datos ingresados. ¿Deseas cancelar la compra?")
+            .setPositiveButton("Sí") { _, _ -> finish() }
             .setNegativeButton("No", null)
             .show()
-
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-
         mostrarDialogoCancelar()
-
     }
 }

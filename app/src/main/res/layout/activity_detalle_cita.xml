@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <!-- FONDO -->
 
     <ImageView
         android:layout_width="match_parent"
@@ -16,8 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#11000000" />
-
-    <!-- TOPBAR -->
 
     <LinearLayout
         android:id="@+id/topBar"
@@ -47,20 +42,18 @@
 
     </LinearLayout>
 
-    <!-- CONTENIDO -->
-
-    <ScrollView
+    <!-- 💡 OPTIMIZACIÓN: Se cambió a NestedScrollView para dar consistencia al scroll y rellenar viewport -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/topBar">
+        android:layout_below="@id/topBar"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
-
-            <!-- CARD -->
 
             <LinearLayout
                 android:id="@+id/cardDetalleCita"
@@ -142,8 +135,6 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <!-- BOTON CONFIRMAR -->
-
                 <Button
                     android:id="@+id/btnConfirmar"
                     android:layout_width="match_parent"
@@ -153,8 +144,6 @@
                     android:text="CONFIRMAR CITA"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
-
-                <!-- BOTON FINALIZAR -->
 
                 <Button
                     android:id="@+id/btnFinalizar"
@@ -167,9 +156,6 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
-
         </LinearLayout>
-
-    </ScrollView>
-
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

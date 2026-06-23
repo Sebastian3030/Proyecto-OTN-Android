@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- CONTENEDOR DE FONDO CON LA IDENTIDAD DE TU APP -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/fondo_logo"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#1A000000"/>
+
+        <!-- BARRA SUPERIOR (TOP BAR) -->
+        <LinearLayout
+            android:id="@+id/topBarPagos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="65dp"
+            android:background="#1AFFFFFF"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="18dp">
+
+            <ImageView
+                android:id="@+id/btnVolver"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/menu"
+                android:rotation="180"/> <!-- Rota el ícono si no tienes una flecha nativa -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingEnd="28dp"
+                android:text="Pasarela de Pago"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- CONTENIDO DE LOS FORMULARIOS -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/topBarPagos"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- INFORMACIÓN RESUMIDA DEL PAGO -->
+                <TextView
+                    android:id="@+id/txtMetodoPago"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Método de pago: --"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/txtTotalPagar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Total: $0"
+                    android:textColor="#00BFFF"
+                    android:textSize="22sp"
+                    android:textStyle="bold"/>
+
+                <!-- MULTI-FORMULARIO DINÁMICO -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="20dp"
+                    android:background="#26FFFFFF"/>
+
+                <!-- SECCIÓN NEQUI -->
+                <LinearLayout
+                    android:id="@+id/layoutNequi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Número de Celular Nequi"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/edtCelular"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#1AFFFFFF"
+                        android:inputType="phone"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="#FFFFFF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Clave Dinámica"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/edtClaveDinamica"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#1AFFFFFF"
+                        android:inputType="numberPassword"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="#FFFFFF"/>
+                </LinearLayout>
+
+                <!-- SECCIÓN BANCOS -->
+                <LinearLayout
+                    android:id="@+id/layoutBanco"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre del Titular"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/edtTitular"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#1AFFFFFF"
+                        android:inputType="textPersonName"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="#FFFFFF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Documento de Identidad"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/edtDocumento"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#1AFFFFFF"
+                        android:inputType="number"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="#FFFFFF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Número de Cuenta"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/edtCuenta"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#1AFFFFFF"
+                        android:inputType="number"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="#FFFFFF"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Clave del Banco"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/edtClave"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#1AFFFFFF"
+                        android:inputType="numberPassword"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="#FFFFFF"/>
+                </LinearLayout>
+
+                <!-- BOTÓN ACCIÓN FINAL -->
+                <Button
+                    android:id="@+id/btnConfirmarPago"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="40dp"
+                    android:backgroundTint="#00BFFF"
+                    android:text="CONFIRMAR PAGO"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
+</LinearLayout>
