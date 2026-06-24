@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- CONTENIDO PRINCIPAL -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,6 +21,7 @@
             android:layout_height="match_parent"
             android:background="#11000000" />
 
+        <!-- TOP BAR -->
         <LinearLayout
             android:id="@+id/topBar"
             android:layout_width="match_parent"
@@ -55,6 +57,7 @@
 
         </LinearLayout>
 
+        <!-- ESTADO VACÍO: CARD SIN COMPRAS -->
         <LinearLayout
             android:id="@+id/cardSinCompras"
             android:layout_width="match_parent"
@@ -88,19 +91,19 @@
 
         </LinearLayout>
 
-        <!-- 💡 OPTIMIZACIÓN: clipToPadding añadido para el comportamiento fluido del scroll de compras -->
+        <!-- LISTA DE COMPRAS -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerCompras"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/topBar"
-            android:padding="20dp"
+            android:padding="12dp"
             android:clipToPadding="false"
             android:visibility="gone" />
 
     </RelativeLayout>
 
-    <!-- MENÚ LATERAL -->
+    <!-- MENÚ LATERAL INTERCEPTOR (ESCUDO ANTI-CLICS FANTASMA) -->
     <LinearLayout
         android:id="@+id/menuLateral"
         android:layout_width="280dp"
@@ -108,34 +111,53 @@
         android:layout_gravity="start"
         android:background="#0E1A2B"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:text="Menú OTN"
+            android:textColor="#4FC3F7"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/txtInicio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="🏠 Inicio"
+            android:layout_marginBottom="25dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="🏠  Inicio"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"/>
+            android:textSize="19sp"/>
 
         <TextView
             android:id="@+id/txtMarketplace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="🛒 Marketplace"
+            android:layout_marginBottom="25dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="🛒  Marketplace"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"/>
+            android:textSize="19sp"/>
 
         <TextView
             android:id="@+id/txtProductos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="📦 Mis Productos"
+            android:layout_marginBottom="25dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="📦  Mis Productos"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"/>
+            android:textSize="19sp"/>
 
         <View
             android:layout_width="match_parent"
@@ -147,9 +169,14 @@
             android:id="@+id/txtCerrarSesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="🚪 Cerrar sesión"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="🚪  Cerrar sesión"
             android:textColor="#FF5252"
-            android:textSize="20sp"
+            android:textSize="19sp"
             android:textStyle="bold"/>
+
     </LinearLayout>
+
 </androidx.drawerlayout.widget.DrawerLayout>

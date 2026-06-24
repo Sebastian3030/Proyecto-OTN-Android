@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
@@ -26,11 +27,13 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
+    private lateinit var menuLateral: LinearLayout
 
     // CARRUSEL ANIMADO
     private lateinit var viewPagerCarrusel: ViewPager2
     private val sliderHandler = Handler(Looper.getMainLooper())
     private lateinit var sliderRunnable: Runnable
+    private var carruselActivo = false
 
     // MENÚ LATERAL
     private lateinit var txtInicio: TextView
@@ -55,6 +58,10 @@ class HomeActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawerLayout)
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
+        menuLateral = findViewById(R.id.menuLateral)
+
+        // ESCUDO DE CLICKS DEFENSIVO PARA EL MENÚ LATERAL
+        menuLateral.setOnClickListener { }
 
         // 2. PARCHE PUNCH HOLE (MUESCA DE CÁMARA)
         val topBar = findViewById<LinearLayout>(R.id.topBar)
@@ -90,14 +97,29 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        // 4. CONFIGURAR RECYCLERVIEW VERTICAL
+        // 4. ESCUCHADOR DEL DRAWER (CONTROL DE CARRUSEL)
+        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                pausarCarrusel()
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+                pausarCarrusel()
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                reanudarCarrusel()
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {}
+        })
+
+        // 5. CONFIGURAR RECYCLERVIEW VERTICAL
         rvProductosHome = findViewById(R.id.rvProductosHome)
         rvProductosHome.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-        // Llamado al método de carga controlado
         cargarProductosDesdeBD()
 
-        // 5. ENLAZAR COMPONENTES DE NAVEGACIÓN Y CATEGORÍAS
+        // 6. ENLAZAR COMPONENTES DE NAVEGACIÓN Y CATEGORÍAS
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
         txtProductos = findViewById(R.id.txtProductos)
@@ -106,17 +128,33 @@ class HomeActivity : AppCompatActivity() {
         cardRopa = findViewById(R.id.cardRopa)
         cardSpa = findViewById(R.id.cardSpa)
 
-        btnMenu.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
+        btnMenu.setOnClickListener {
+            pausarCarrusel()
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        // =========================================================================
+        // 🟢 ¡BOTÓN SECRETO PARA PROBAR TU API AQUÍ!
+        // Al mantener presionado el botón de menú (3 rayitas) abrirá la de pruebas.
+        // =========================================================================
+        btnMenu.setOnLongClickListener {
+            val intentPrueba = Intent(this, TestApiActivity::class.java)
+            startActivity(intentPrueba)
+            true
+        }
+
         txtInicio.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
 
         txtMarketplace.setOnClickListener {
             startActivity(Intent(this, MarketplaceActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
+            finish()
         }
 
         txtProductos.setOnClickListener {
             startActivity(Intent(this, MisProductosActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
+            finish()
         }
 
         txtCerrarSesion.setOnClickListener {
@@ -128,7 +166,7 @@ class HomeActivity : AppCompatActivity() {
         cardRopa.setOnClickListener { abrirMarketplaceConFiltro("ropa") }
         cardSpa.setOnClickListener { abrirMarketplaceConFiltro("spa") }
 
-        // 6. POPUP MENÚ PERFIL UNIFICADO MATERIAL 3
+        // 7. POPUP MENÚ PERFIL UNIFICADO MATERIAL 3
         imgPerfil.setOnClickListener {
             val contextWrapper = ContextThemeWrapper(this, R.style.PopupMenuStyle)
             val popupMenu = PopupMenu(contextWrapper, imgPerfil)
@@ -154,7 +192,10 @@ class HomeActivity : AppCompatActivity() {
                 when (item.itemId) {
                     0 -> startActivity(Intent(this, ProfileActivity::class.java))
                     1 -> startActivity(Intent(this, EditarPerfilActivity::class.java))
-                    2 -> startActivity(Intent(this, PublicarActivity::class.java))
+                    2 -> {
+                        startActivity(Intent(this, PublicarActivity::class.java))
+                        finish()
+                    }
                     3 -> startActivity(Intent(this, FavoritosActivity::class.java))
                     4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
                     5 -> startActivity(Intent(this, AgendarCitaActivity::class.java))
@@ -171,18 +212,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Simulación de respuesta de API reducida a 2 elementos requeridos.
-     * Mantiene intacta la estructura del modelo global "Producto".
-     */
     private fun cargarProductosDesdeBD() {
         listaDeProductos.clear()
-
-        // Mantenemos solo 2 productos con la estructura limpia del objeto listo para JSON/BD
         listaDeProductos.add(Producto("1", "iPhone 17 Pro", "$4.500.000", "tecnologia", R.drawable.iphone_17))
         listaDeProductos.add(Producto("2", "Vestido Elegante", "$120.000", "ropa", R.drawable.vestido))
-
-        // Al presionar cualquiera, el ProductosHomeAdapter gestionará la navegación automática hacia el Detalle
         rvProductosHome.adapter = ProductosHomeAdapter(listaDeProductos)
     }
 
@@ -191,16 +224,37 @@ class HomeActivity : AppCompatActivity() {
             putExtra("categoria", categoria)
         }
         startActivity(intent)
+        finish()
+    }
+
+    private fun pausarCarrusel() {
+        if (carruselActivo) {
+            sliderHandler.removeCallbacks(sliderRunnable)
+            carruselActivo = false
+        }
+    }
+
+    private fun reanudarCarrusel() {
+        sliderHandler.removeCallbacks(sliderRunnable)
+        if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            sliderHandler.postDelayed(sliderRunnable, 4000)
+            carruselActivo = true
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        sliderHandler.removeCallbacks(sliderRunnable)
+        pausarCarrusel()
     }
 
     override fun onResume() {
         super.onResume()
-        sliderHandler.postDelayed(sliderRunnable, 4000)
+        reanudarCarrusel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sliderHandler.removeCallbacksAndMessages(null)
     }
 
     override fun onBackPressed() {

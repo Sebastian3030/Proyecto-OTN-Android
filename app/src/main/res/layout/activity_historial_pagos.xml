@@ -32,7 +32,8 @@
             android:clickable="true"
             android:focusable="true"
             android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/ic_arrow_back" />
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Volver atrás" />
 
         <TextView
             android:layout_width="0dp"
@@ -47,13 +48,12 @@
 
     </LinearLayout>
 
-    <!-- 💡 CORRECCIÓN CRÍTICA: Se eliminó el ScrollView estático duro y se reemplazó por un RecyclerView dinámico -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPagos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/topBarPagos"
-        android:padding="16dp"
+        android:padding="12dp"
         android:clipToPadding="false"/>
 
 </RelativeLayout>

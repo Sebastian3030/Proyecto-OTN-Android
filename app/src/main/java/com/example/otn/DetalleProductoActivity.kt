@@ -23,6 +23,7 @@ class DetalleProductoActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
+    private lateinit var menuLateral: LinearLayout // 🟢 Control táctil del menú lateral
 
     private lateinit var txtNombreProducto: TextView
     private lateinit var txtPrecio: TextView
@@ -32,10 +33,13 @@ class DetalleProductoActivity : AppCompatActivity() {
     private lateinit var btnContactar: Button
     private lateinit var btnComprar: Button
 
+    // 🟢 Almacenamiento del ID para pasarlo al Chat o Compra
+    private var productoId: String? = null
+
     // MENÚ LATERAL UNIFICADO
     private lateinit var txtInicio: TextView
     private lateinit var txtMarketplace: TextView
-    private lateinit var txtPublicar: TextView // 🛠️ CORREGIDO: Cambiado de txtProductos a txtPublicar
+    private lateinit var txtPublicar: TextView
     private lateinit var txtCerrarSesion: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +50,10 @@ class DetalleProductoActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawerLayout)
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
+        menuLateral = findViewById(R.id.menuLateral) // 🟢 Inicializado
+
+        // Escudo de clics defensivo para el menú lateral
+        menuLateral.setOnClickListener { }
 
         txtNombreProducto = findViewById(R.id.txtNombreProducto)
         txtPrecio = findViewById(R.id.txtPrecio)
@@ -54,7 +62,8 @@ class DetalleProductoActivity : AppCompatActivity() {
         btnContactar = findViewById(R.id.btnContactar)
         btnComprar = findViewById(R.id.btnComprar)
 
-        // 2. RECUPERAR DATOS DEL INTENT
+        // 2. RECUPERAR DATOS DEL INTENT (Añadido el ID del producto)
+        productoId = intent.getStringExtra("id_producto") ?: "0"
         val nombre = intent.getStringExtra("nombre") ?: "Producto OTN"
         val precio = intent.getStringExtra("precio") ?: "$0.00"
 
@@ -76,18 +85,20 @@ class DetalleProductoActivity : AppCompatActivity() {
                 btnFavorito.setColorFilter(Color.parseColor("#FF5252"))
                 Toast.makeText(this, "Añadido a Favoritos ❤️", Toast.LENGTH_SHORT).show()
                 esFavorito = true
+                // TODO: Agregar a la tabla de favoritos en BD usando productoId
             } else {
                 btnFavorito.setImageResource(R.drawable.ic_corazon_vacio)
                 btnFavorito.clearColorFilter()
                 Toast.makeText(this, "Eliminado de Favoritos", Toast.LENGTH_SHORT).show()
                 esFavorito = false
+                // TODO: Remover de la tabla de favoritos en BD usando productoId
             }
         }
 
         // 5. ENLAZAR MENÚ LATERAL REAL DEL XML
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
-        txtPublicar = findViewById(R.id.txtPublicar) // 🛠️ CORREGIDO: ID coincide con tu XML real
+        txtPublicar = findViewById(R.id.txtPublicar)
         txtCerrarSesion = findViewById(R.id.txtCerrarSesion)
 
         btnMenu.setOnClickListener {
@@ -120,7 +131,10 @@ class DetalleProductoActivity : AppCompatActivity() {
                 when (item.itemId) {
                     0 -> startActivity(Intent(this, ProfileActivity::class.java))
                     1 -> startActivity(Intent(this, EditarPerfilActivity::class.java))
-                    2 -> startActivity(Intent(this, PublicarActivity::class.java))
+                    2 -> {
+                        startActivity(Intent(this, PublicarActivity::class.java))
+                        finish()
+                    }
                     3 -> startActivity(Intent(this, FavoritosActivity::class.java))
                     4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
                     5 -> startActivity(Intent(this, AgendarCitaActivity::class.java))
@@ -147,7 +161,7 @@ class DetalleProductoActivity : AppCompatActivity() {
             finish()
         }
 
-        txtPublicar.setOnClickListener { // 🛠️ CORREGIDO
+        txtPublicar.setOnClickListener {
             startActivity(Intent(this, PublicarActivity::class.java))
             finish()
         }
@@ -157,10 +171,15 @@ class DetalleProductoActivity : AppCompatActivity() {
             finishAffinity()
         }
 
-        // BOTONES DE ACCIÓN
+        // BOTONES DE ACCIÓN CONFIGURADOS CON DATOS
         btnContactar.setOnClickListener {
             try {
-                startActivity(Intent(this, ChatActivity::class.java))
+                // 🟢 CORRECCIÓN: Le pasamos los datos del producto al Chat para saber qué se está cotizando
+                val intentChat = Intent(this, ChatActivity::class.java).apply {
+                    putExtra("id_producto", productoId)
+                    putExtra("nombre_producto", nombre)
+                }
+                startActivity(intentChat)
             } catch (e: Exception) {
                 Toast.makeText(this, "Pantalla de chat en desarrollo", Toast.LENGTH_SHORT).show()
             }
@@ -168,7 +187,13 @@ class DetalleProductoActivity : AppCompatActivity() {
 
         btnComprar.setOnClickListener {
             try {
-                startActivity(Intent(this, CompraActivity::class.java))
+                // 🟢 CORRECCIÓN: Pasamos la información de cobro a la pantalla de Checkout
+                val intentCompra = Intent(this, CompraActivity::class.java).apply {
+                    putExtra("id_producto", productoId)
+                    putExtra("nombre_producto", nombre)
+                    putExtra("precio_producto", precio)
+                }
+                startActivity(intentCompra)
             } catch (e: Exception) {
                 Toast.makeText(this, "Pantalla de compra en desarrollo", Toast.LENGTH_SHORT).show()
             }
@@ -179,7 +204,7 @@ class DetalleProductoActivity : AppCompatActivity() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            super.onBackPressed() // Te regresa al Home o Marketplace limpiamente preservando el stack
         }
     }
 }

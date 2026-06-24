@@ -11,8 +11,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Spinner
 import android.widget.TextView
@@ -31,6 +31,7 @@ class PublicarActivity : AppCompatActivity() {
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
     private lateinit var btnPublicar: Button
+    private lateinit var menuLateral: LinearLayout // 🟢 Bloqueador de clics fantasma
 
     private lateinit var btnSeleccionarImagen: LinearLayout
     private lateinit var imgPrevisualizacion: ImageView
@@ -72,6 +73,14 @@ class PublicarActivity : AppCompatActivity() {
         etDescripcion = findViewById(R.id.etDescripcion)
         btnPublicar = findViewById(R.id.btnPublicar)
 
+        drawerLayout = findViewById(R.id.drawerLayout)
+        btnMenu = findViewById(R.id.btnMenu)
+        imgPerfil = findViewById(R.id.imgPerfil)
+        menuLateral = findViewById(R.id.menuLateral) // 🟢 Inicializado
+
+        // Evita que toques accidentales en el fondo del menú alteren el formulario
+        menuLateral.setOnClickListener { }
+
         val opcionesCategorias = arrayOf("Selecciona una categoría", "Tecnología", "Ropa", "SPA")
         val adapterSpinner = object : ArrayAdapter<String>(
             this,
@@ -95,10 +104,6 @@ class PublicarActivity : AppCompatActivity() {
         spinnerCategoria.adapter = adapterSpinner
 
         btnSeleccionarImagen.setOnClickListener { abrirGaleriaLauncher.launch("image/*") }
-
-        drawerLayout = findViewById(R.id.drawerLayout)
-        btnMenu = findViewById(R.id.btnMenu)
-        imgPerfil = findViewById(R.id.imgPerfil)
 
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
@@ -140,7 +145,7 @@ class PublicarActivity : AppCompatActivity() {
                 when (item.itemId) {
                     0 -> startActivity(Intent(this, ProfileActivity::class.java))
                     1 -> startActivity(Intent(this, EditarPerfilActivity::class.java))
-                    2 -> drawerLayout.closeDrawer(GravityCompat.START) // Ya estamos en Publicar/Vincular
+                    2 -> drawerLayout.closeDrawer(GravityCompat.START)
                     3 -> startActivity(Intent(this, FavoritosActivity::class.java))
                     4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
                     5 -> startActivity(Intent(this, AgendarCitaActivity::class.java))
@@ -172,17 +177,17 @@ class PublicarActivity : AppCompatActivity() {
             if (categoriaSeleccionada == 0) { Toast.makeText(this, "Selecciona una categoría", Toast.LENGTH_SHORT).show(); return@setOnClickListener }
             if (precio.isEmpty()) { etPrecio.error = "Campo obligatorio"; etPrecio.requestFocus(); return@setOnClickListener }
             if (contacto.isEmpty()) { etContacto.error = "Campo obligatorio"; etContacto.requestFocus(); return@setOnClickListener }
-            if (contacto.length < 7) { etContacto.error = "Mínimo 7 dígitos"; etContacto.requestFocus(); return@setOnClickListener }
+            if (contacto.length < 10) { etContacto.error = "Mínimo 10 dígitos"; etContacto.requestFocus(); return@setOnClickListener }
             if (ubicacion.isEmpty()) { etUbicacion.error = "Campo obligatorio"; etUbicacion.requestFocus(); return@setOnClickListener }
             if (descripcion.isEmpty()) { etDescripcion.error = "Campo obligatorio"; etDescripcion.requestFocus(); return@setOnClickListener }
 
-            // --- AQUÍ CONECTAS TU MULTIPART O FORMATO BASE64 PARA SUBIR LA IMAGEN REAL ---
             Toast.makeText(this, "¡Producto '$nombre' publicado correctamente!", Toast.LENGTH_LONG).show()
 
             startActivity(Intent(this, MarketplaceActivity::class.java))
             finish()
         }
 
+        // NAVEGACIÓN LATERAL HOMOLOGADA
         txtInicio.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
@@ -191,7 +196,11 @@ class PublicarActivity : AppCompatActivity() {
             startActivity(Intent(this, MarketplaceActivity::class.java))
             finish()
         }
-        txtProductos.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
+        txtProductos.setOnClickListener {
+            // 🟢 CORRECCIÓN: Lleva al historial de ítems del usuario de forma correcta
+            startActivity(Intent(this, MisProductosActivity::class.java))
+            finish()
+        }
         txtCerrarSesion.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
             finishAffinity()

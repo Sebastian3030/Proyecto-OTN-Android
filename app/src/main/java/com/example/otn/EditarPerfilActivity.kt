@@ -27,6 +27,7 @@ class EditarPerfilActivity : AppCompatActivity() {
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
     private lateinit var btnGuardar: Button
+    private lateinit var menuLateral: LinearLayout // 🟢 Variable agregada para control táctil
 
     private lateinit var btnSeleccionarImagen: LinearLayout
     private lateinit var imgPrevisualizacion: ImageView
@@ -57,10 +58,15 @@ class EditarPerfilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_perfil)
 
+        // Inicializar componentes base
         drawerLayout = findViewById(R.id.drawerLayout)
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
         btnGuardar = findViewById(R.id.btnGuardar)
+        menuLateral = findViewById(R.id.menuLateral) // 🟢 Inicializado
+
+        // ESCUDO DE CLICKS DEFENSIVO PARA EL MENÚ LATERAL
+        menuLateral.setOnClickListener { }
 
         btnSeleccionarImagen = findViewById(R.id.btnSeleccionarImagen)
         imgPrevisualizacion = findViewById(R.id.imgPrevisualizacion)
@@ -115,8 +121,14 @@ class EditarPerfilActivity : AppCompatActivity() {
 
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    0 -> startActivity(Intent(this, ProfileActivity::class.java))
-                    2 -> startActivity(Intent(this, PublicarActivity::class.java))
+                    0 -> {
+                        startActivity(Intent(this, ProfileActivity::class.java))
+                        finish()
+                    }
+                    2 -> {
+                        startActivity(Intent(this, PublicarActivity::class.java))
+                        finish()
+                    }
                     3 -> startActivity(Intent(this, FavoritosActivity::class.java))
                     4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
                     5 -> startActivity(Intent(this, AgendarCitaActivity::class.java))
@@ -132,11 +144,13 @@ class EditarPerfilActivity : AppCompatActivity() {
             popupMenu.show()
         }
 
+        // ACCIÓN GUARDAR CAMBIOS
         btnGuardar.setOnClickListener {
             val nombre = etNombre.text.toString().trim()
             val correo = etCorreo.text.toString().trim()
             val telefono = etTelefono.text.toString().trim()
             val ciudad = etCiudad.text.toString().trim()
+            val descripcion = etDescripcion.text.toString().trim()
 
             if (nombre.isEmpty()) {
                 etNombre.error = "El nombre es obligatorio"
@@ -164,23 +178,29 @@ class EditarPerfilActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Aquí irá el mapeo del objeto / Multipart para subir la imagen a Firebase Storage o AWS
             Toast.makeText(this, "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show()
             finish()
         }
 
+        // NAVEGACIÓN CAJÓN LATERAL HOMOLOGADA
         txtInicio.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
+            finish() // 🟢 Parche de memoria aplicado
         }
 
         txtMarketplace.setOnClickListener {
             startActivity(Intent(this, MarketplaceActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
+            finish() // 🟢 Parche de memoria aplicado
         }
 
         txtProductos.setOnClickListener {
-            startActivity(Intent(this, PublicarActivity::class.java))
+            // 🟢 CORRECCIÓN: Apunta a la lista de mis productos para mantener consistencia con los demás flujos
+            startActivity(Intent(this, MisProductosActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
+            finish()
         }
 
         txtCerrarSesion.setOnClickListener {

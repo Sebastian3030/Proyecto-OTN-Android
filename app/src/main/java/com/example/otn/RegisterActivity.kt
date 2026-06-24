@@ -37,7 +37,7 @@ class RegisterActivity : AppCompatActivity() {
         // ==========================================
         btnRegistrar.setOnClickListener {
 
-            // 1. CAPTURA DE DATOS LIMPIOS (Sin espacios invisibles en los extremos)
+            // 1. CAPTURA DE DATOS LIMPIOS
             val nombre = etNombre.text.toString().trim()
             val correo = etCorreo.text.toString().trim()
             val password = etPassword.text.toString().trim()
@@ -54,7 +54,6 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Valida que sea un formato de correo real (ejemplo@dominio.com)
             if (!Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
                 etCorreo.error = "Ingrese un formato de correo electrónico válido"
                 return@setOnClickListener
@@ -65,7 +64,6 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Firebase exige mínimo 6 caracteres por seguridad
             if (password.length < 6) {
                 etPassword.error = "La contraseña debe tener mínimo 6 caracteres"
                 return@setOnClickListener
@@ -77,15 +75,13 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             if (password != confirmPassword) {
+                // 🟢 CORRECCIÓN: Quitamos el Toast redundante, con el globito de error es suficiente y más limpio
                 etConfirmPassword.error = "Las contraseñas no coinciden"
-                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             // ====================================================================
             // ZONA BACKEND: Aquí crearás el usuario en tu servicio de Auth o BD.
-            // Ejemplo futuro con Firebase:
-            // auth.createUserWithEmailAndPassword(correo, password).addOnCompleteListener { ... }
             // ====================================================================
 
             Toast.makeText(this, "Cuenta creada correctamente", Toast.LENGTH_SHORT).show()
@@ -93,7 +89,7 @@ class RegisterActivity : AppCompatActivity() {
             // Volver al login de forma limpia
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish() // Cerramos el registro para que no quede en el historial si da atrás
+            finish()
         }
 
         // VOLVER AL LOGIN

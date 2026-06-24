@@ -14,7 +14,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.GravityCompat
@@ -30,6 +29,7 @@ class MarketplaceActivity : AppCompatActivity() {
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
     private lateinit var etBuscador: EditText
+    private lateinit var menuLateral: LinearLayout // 🟢 Control táctil del menú lateral
 
     // MENU LATERAL
     private lateinit var txtInicio: TextView
@@ -47,17 +47,25 @@ class MarketplaceActivity : AppCompatActivity() {
     private lateinit var rvMarketplace: RecyclerView
     private var listaCompletaProductos = ArrayList<Producto>()
     private var listaFiltradaProductos = ArrayList<Producto>()
-    private lateinit var adapter: ProductosHomeAdapter // Reutilizamos tu adaptador de productos
+    private lateinit var adapter: ProductosHomeAdapter
+
+    // 🟢 Estados globales para permitir filtrado cruzado (Categoría + Texto)
+    private var categoriaSeleccionadaActual: String? = null
+    private var textoBusquedaActual: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_marketplace)
 
-        // 1. VINCULAR VISTAS EXACTAS DE TU XML
+        // 1. VINCULAR VISTAS EXACTAS
         drawerLayout = findViewById(R.id.drawerLayout)
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
         etBuscador = findViewById(R.id.etBuscador)
+        menuLateral = findViewById(R.id.menuLateral) // 🟢 Inicializado
+
+        // Escudo de clics defensivo
+        menuLateral.setOnClickListener { }
 
         txtInicio = findViewById(R.id.txtInicio)
         txtMarketplace = findViewById(R.id.txtMarketplace)
@@ -74,15 +82,13 @@ class MarketplaceActivity : AppCompatActivity() {
         // 2. CONFIGURAR EL RECYCLERVIEW EN GRILLA (2 Columnas)
         rvMarketplace.layoutManager = GridLayoutManager(this, 2)
 
-        // Cargar la lista base de prueba (simulando tu BD)
         generarProductosMock()
 
-        // Inicializamos el adaptador con la lista filtrada (al inicio muestra todos)
-        listaFiltradaProductos.addAll(listaCompletaProductos)
+        // Inicialización limpia
         adapter = ProductosHomeAdapter(listaFiltradaProductos)
         rvMarketplace.adapter = adapter
 
-        // 3. PARCHE PUNCH HOLE (Muesca de la cámara)
+        // 3. PARCHE PUNCH HOLE
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
@@ -90,18 +96,19 @@ class MarketplaceActivity : AppCompatActivity() {
             insets
         }
 
-        // 4. ACCIÓN BOTÓN MENÚ LATERAL
         btnMenu.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
 
-        // 5. NAVEGACIÓN MENÚ LATERAL
+        // 5. NAVEGACIÓN MENÚ LATERAL CORREGIDA
         txtInicio.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))
-            finish()
+            drawerLayout.closeDrawer(GravityCompat.START)
+            finish() // 🟢 Mantiene el Stack limpio, pero el Home siempre debe poder relanzarse
         }
         txtMarketplace.setOnClickListener { drawerLayout.closeDrawer(GravityCompat.START) }
         txtPublicar.setOnClickListener {
             startActivity(Intent(this, PublicarActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
+            finish()
         }
         txtCerrarSesion.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
@@ -134,7 +141,10 @@ class MarketplaceActivity : AppCompatActivity() {
                 when (item.itemId) {
                     0 -> startActivity(Intent(this, ProfileActivity::class.java))
                     1 -> startActivity(Intent(this, EditarPerfilActivity::class.java))
-                    2 -> startActivity(Intent(this, PublicarActivity::class.java))
+                    2 -> {
+                        startActivity(Intent(this, PublicarActivity::class.java))
+                        finish()
+                    }
                     3 -> startActivity(Intent(this, FavoritosActivity::class.java))
                     4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
                     5 -> startActivity(Intent(this, AgendarCitaActivity::class.java))
@@ -150,26 +160,38 @@ class MarketplaceActivity : AppCompatActivity() {
             popupMenu.show()
         }
 
-        // 7. LÓGICA DE FILTRADO POR BOTONES
-        val categoriaInicial = intent.getStringExtra("categoria")
-        filtrarPorCategoria(categoriaInicial)
+        // 7. LÓGICA DE FILTRADO UNIFICADA
+        categoriaSeleccionadaActual = intent.getStringExtra("categoria")
+        aplicarFiltrosCombinados()
 
-        btnTodos.setOnClickListener { filtrarPorCategoria(null) }
-        btnTecnologia.setOnClickListener { filtrarPorCategoria("tecnologia") }
-        btnRopa.setOnClickListener { filtrarPorCategoria("ropa") }
-        btnSpa.setOnClickListener { filtrarPorCategoria("spa") }
+        btnTodos.setOnClickListener {
+            categoriaSeleccionadaActual = null
+            aplicarFiltrosCombinados()
+        }
+        btnTecnologia.setOnClickListener {
+            categoriaSeleccionadaActual = "tecnologia"
+            aplicarFiltrosCombinados()
+        }
+        btnRopa.setOnClickListener {
+            categoriaSeleccionadaActual = "ropa"
+            aplicarFiltrosCombinados()
+        }
+        btnSpa.setOnClickListener {
+            categoriaSeleccionadaActual = "spa"
+            aplicarFiltrosCombinados()
+        }
 
-        // 8. LÓGICA DEL BUSCADOR DE TEXTO (Para buscar en tiempo real)
+        // 8. LÓGICA DEL BUSCADOR EN TIEMPO REAL
         etBuscador.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                buscarProductoPorTexto(s.toString())
+                textoBusquedaActual = s.toString().lowercase().trim()
+                aplicarFiltrosCombinados()
             }
             override fun afterTextChanged(s: Editable?) {}
         })
     }
 
-    // Simulador de datos de tu Backend
     private fun generarProductosMock() {
         listaCompletaProductos.clear()
         listaCompletaProductos.add(Producto("1", "iPhone 15", "$4.500.000", "tecnologia", R.drawable.iphone_17))
@@ -180,33 +202,30 @@ class MarketplaceActivity : AppCompatActivity() {
         listaCompletaProductos.add(Producto("6", "Masajes Reductores", "$90.000", "spa", R.drawable.masajes))
     }
 
-    private fun filtrarPorCategoria(categoria: String?) {
+    // 🟢 SOLUCIÓN MAESTRA: Este método unifica ambos filtros para que trabajen en equipo
+    private fun aplicarFiltrosCombinados() {
         listaFiltradaProductos.clear()
-        if (categoria == null) {
-            listaFiltradaProductos.addAll(listaCompletaProductos)
-            actualizarEstiloBotones(btnTodos)
-        } else {
-            val filtrados = listaCompletaProductos.filter { it.categoria.lowercase() == categoria.lowercase() }
-            listaFiltradaProductos.addAll(filtrados)
-            when (categoria) {
-                "tecnologia" -> actualizarEstiloBotones(btnTecnologia)
-                "ropa" -> actualizarEstiloBotones(btnRopa)
-                "spa" -> actualizarEstiloBotones(btnSpa)
-            }
-        }
-        adapter.notifyDataSetChanged()
-    }
 
-    private fun buscarProductoPorTexto(texto: String) {
-        val query = texto.lowercase().trim()
-        listaFiltradaProductos.clear()
-        if (query.isEmpty()) {
-            listaFiltradaProductos.addAll(listaCompletaProductos)
-        } else {
-            val filtrados = listaCompletaProductos.filter { it.nombre.lowercase().contains(query) }
-            listaFiltradaProductos.addAll(filtrados)
+        val resultado = listaCompletaProductos.filter { producto ->
+            val coincideCategoria = if (categoriaSeleccionadaActual == null) true
+            else producto.categoria.lowercase() == categoriaSeleccionadaActual!!.lowercase()
+
+            val coincideTexto = if (textoBusquedaActual.isEmpty()) true
+            else producto.nombre.lowercase().contains(textoBusquedaActual)
+
+            coincideCategoria && coincideTexto
         }
+
+        listaFiltradaProductos.addAll(resultado)
         adapter.notifyDataSetChanged()
+
+        // Actualiza visualmente los botones según el estado
+        when (categoriaSeleccionadaActual) {
+            null -> actualizarEstiloBotones(btnTodos)
+            "tecnologia" -> actualizarEstiloBotones(btnTecnologia)
+            "ropa" -> actualizarEstiloBotones(btnRopa)
+            "spa" -> actualizarEstiloBotones(btnSpa)
+        }
     }
 
     private fun actualizarEstiloBotones(botonActivo: Button) {
@@ -219,11 +238,13 @@ class MarketplaceActivity : AppCompatActivity() {
         botonActivo.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#00BFFF"))
     }
 
+    // 🟢 CORRECCIÓN: Si el usuario da atrás y el drawer está cerrado, vuelve al Home limpiamente
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
         }
     }
 }

@@ -1,48 +1,53 @@
 package com.example.otn
 
-import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.ImageView
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var btnVolver: ImageView
     private lateinit var edtMensaje: EditText
     private lateinit var btnEnviar: Button
-    private lateinit var layoutMensajes: LinearLayout
-    private lateinit var scrollMensajes: ScrollView
+    private lateinit var recyclerMensajes: RecyclerView
 
-    private val idUsuarioActual = "USER_SEBAS_123"
-    private val idVendedorOTratante = "VENDEDOR_OTN_456"
+    private var listaDeMensajes = ArrayList<MensajeChat>()
+    private lateinit var chatAdapter: ChatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chat)
+        setContentView(R.layout.activity_chat) // Asegúrate de cambiar el ScrollView por un RecyclerView con id: recyclerMensajes
 
         btnVolver = findViewById(R.id.btnVolver)
         edtMensaje = findViewById(R.id.edtMensaje)
         btnEnviar = findViewById(R.id.btnEnviar)
-        layoutMensajes = findViewById(R.id.layoutMensajes)
-        scrollMensajes = findViewById(R.id.scrollMensajes)
+        recyclerMensajes = findViewById(R.id.recyclerMensajes)
 
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         val barraEnviar = findViewById<LinearLayout>(R.id.barraEnviar)
 
-        val vistaRaiz = scrollMensajes.parent as View
-        ViewCompat.setOnApplyWindowInsetsListener(vistaRaiz) { _, insets ->
+        // CONFIGURAR RECYCLERVIEW PARA CHAT
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.stackFromEnd = true // Hace que el chat empiece desde abajo
+        recyclerMensajes.layoutManager = layoutManager
+
+        chatAdapter = ChatAdapter(listaDeMensajes)
+        recyclerMensajes.adapter = chatAdapter
+
+        // Control de teclado inteligente
+        ViewCompat.setOnApplyWindowInsetsListener(recyclerMensajes) { _, insets ->
             val statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars())
             val navigationBarsInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
             val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
@@ -58,21 +63,20 @@ class ChatActivity : AppCompatActivity() {
         btnVolver.setOnClickListener { finish() }
 
         // Mensajes semilla del bot
-        agregarMensajeVendedor("Hola, soy un bot por el momento :)")
-        agregarMensajeVendedor("Hola 👋, gracias por comunicarte. ¿En qué puedo ayudarte?")
+        agregarMensajeAlChat("Hola, soy un bot por el momento :)", esUsuario = false)
+        agregarMensajeAlChat("Hola 👋, gracias por comunicarte. ¿En qué puedo ayudarte?", esUsuario = false)
 
         btnEnviar.setOnClickListener {
             val textoMensaje = edtMensaje.text.toString().trim()
 
             if (textoMensaje.isNotEmpty()) {
-                agregarMensajeUsuario(textoMensaje)
+                agregarMensajeAlChat(textoMensaje, esUsuario = true)
                 edtMensaje.setText("")
 
-                // 💡 CORRECCIÓN CRÍTICA: Cambiado a Corrutinas seguras ligadas al ciclo de vida
                 lifecycleScope.launch {
                     delay(1000)
                     val respuesta = obtenerRespuesta(textoMensaje)
-                    agregarMensajeVendedor(respuesta)
+                    agregarMensajeAlChat(respuesta, esUsuario = false)
                 }
             }
         }
@@ -90,46 +94,23 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun agregarMensajeUsuario(texto: String) {
-        val mensaje = TextView(this).apply {
-            text = texto
-            setTextColor(Color.WHITE)
-            // 💡 OPTIMIZACIÓN STYLING: Padding generoso y márgenes limpios
-            setPadding(35, 22, 35, 22)
-            setBackgroundResource(R.drawable.bg_burbuja_usuario) // Recuerda crear este shape con color #455A64 y corners redondeados
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                gravity = Gravity.END
-                topMargin = 16
-                bottomMargin = 4
-            }
-        }
-        layoutMensajes.addView(mensaje)
-        bajarScroll()
-    }
+    private fun agregarMensajeAlChat(texto: String, esUsuario: Boolean) {
+        val nuevoMensaje = MensajeChat(
+            id = UUID.randomUUID().toString(),
+            texto = texto,
+            esUsuarioActual = esUsuario,
+            hora = "00:00"
+        )
+        listaDeMensajes.add(nuevoMensaje)
 
-    private fun agregarMensajeVendedor(texto: String) {
-        val mensaje = TextView(this).apply {
-            text = texto
-            setTextColor(Color.WHITE)
-            setPadding(35, 22, 35, 22)
-            setBackgroundResource(R.drawable.bg_burbuja_vendedor) // Shape con color #263238 y corners redondeados
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                gravity = Gravity.START
-                topMargin = 16
-                bottomMargin = 4
-            }
-        }
-        layoutMensajes.addView(mensaje)
+        // Notifica al adaptador que llegó un mensaje nuevo de forma eficiente
+        chatAdapter.notifyItemInserted(listaDeMensajes.size - 1)
         bajarScroll()
     }
 
     private fun bajarScroll() {
-        scrollMensajes.post { scrollMensajes.fullScroll(ScrollView.FOCUS_DOWN) }
+        if (listaDeMensajes.isNotEmpty()) {
+            recyclerMensajes.smoothScrollToPosition(listaDeMensajes.size - 1)
+        }
     }
 }

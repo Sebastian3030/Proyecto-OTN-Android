@@ -23,12 +23,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import java.util.Calendar
+import java.util.Locale
 
 class AgendarCitaActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var btnMenu: ImageView
     private lateinit var imgPerfil: ImageView
+    private lateinit var menuLateral: LinearLayout // 🟢 Vinculado para el control táctil
 
     private lateinit var spinnerServicio: Spinner
     private lateinit var spinnerHora: Spinner
@@ -49,10 +51,14 @@ class AgendarCitaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agendar_cita)
 
-        // DRAWER
+        // DRAWER Y ESCUDO DEFENSIVO
         drawerLayout = findViewById(R.id.drawerLayout)
         btnMenu = findViewById(R.id.btnMenu)
         imgPerfil = findViewById(R.id.imgPerfil)
+        menuLateral = findViewById(R.id.menuLateral) // 🟢 Inicializado
+
+        // Absorbe clics fantasma para evitar activar el formulario de fondo
+        menuLateral.setOnClickListener { }
 
         val topBar = findViewById<LinearLayout>(R.id.topBar)
         ViewCompat.setOnApplyWindowInsetsListener(topBar) { view, insets ->
@@ -88,7 +94,6 @@ class AgendarCitaActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
         txtProductos.setOnClickListener {
-            // 💡 CORRECCIÓN: Apunta correctamente al Historial de Publicaciones del usuario
             startActivity(Intent(this, MisProductosActivity::class.java))
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -97,7 +102,7 @@ class AgendarCitaActivity : AppCompatActivity() {
             finishAffinity()
         }
 
-        // POPUP MENÚ PERFIL (Mantenemos tu lógica impecable del Home)
+        // POPUP MENÚ PERFIL UNIFICADO
         imgPerfil.setOnClickListener {
             val contextoOscuro = ContextThemeWrapper(this, R.style.PopupMenuStyle)
             val popupMenu = PopupMenu(contextoOscuro, imgPerfil)
@@ -123,6 +128,7 @@ class AgendarCitaActivity : AppCompatActivity() {
                 when (item.itemId) {
                     0 -> startActivity(Intent(this, ProfileActivity::class.java))
                     1 -> startActivity(Intent(this, EditarPerfilActivity::class.java))
+                    2 -> startActivity(Intent(this, PublicarActivity::class.java)) // 🟢 Arreglado: Faltaba este flujo
                     3 -> startActivity(Intent(this, FavoritosActivity::class.java))
                     4 -> startActivity(Intent(this, HistorialCitasActivity::class.java))
                     5 -> { /* Ya estamos aquí */ }
@@ -155,7 +161,8 @@ class AgendarCitaActivity : AppCompatActivity() {
         txtFecha.setOnClickListener {
             val calendario = Calendar.getInstance()
             val datePicker = DatePickerDialog(this, { _, y, m, d ->
-                txtFecha.text = "$d/${m + 1}/$y"
+                // 🟢 Formateo estándar de dos dígitos (DD/MM/YYYY) compatible con cualquier backend
+                txtFecha.text = String.format(Locale.getDefault(), "%02d/%02d/%d", d, m + 1, y)
             }, calendario.get(Calendar.YEAR), calendario.get(Calendar.MONTH), calendario.get(Calendar.DAY_OF_MONTH))
             datePicker.show()
         }
